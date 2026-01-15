@@ -1,6 +1,10 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using FusePortal.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using FusePortal.Domain.UserAggregate;
+using FusePortal.Infrastructure.Repo;
 
 namespace FusePortal.Infrastructure
 {
@@ -10,7 +14,10 @@ namespace FusePortal.Infrastructure
                 this IServiceCollection services,
                 IConfiguration configuratoin)
         {
-            // services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlite(configuratoin.GetConnectionString("AppDbContext")));
+
+            services.AddScoped<IUserRepo, UserRepo>();
 
             return services;
         }
