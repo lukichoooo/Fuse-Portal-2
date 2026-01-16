@@ -9,13 +9,15 @@ namespace FusePortal.Infrastructure.Repo
         private readonly AppDbContext _context = context;
 
         public Task<User?> GetByEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
-
+            => _context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
         public ValueTask<User?> GetByIdAsync(int id)
             => _context.Users.FindAsync(id);
+
+
+        public async Task<User?> GetUserDetailsByIdAsync(int id)
+            => await _context.Users.FindAsync(id); // add includes later
+
 
         public async Task<List<User>> GetUsersPageAsync(int? lastId, int pageSize)
         {
@@ -40,10 +42,6 @@ namespace FusePortal.Infrastructure.Repo
             => await _context.Users
                 .Where(u => u.Id == id)
                 .ExecuteDeleteAsync();
-
-
-        public async Task<User?> GetUserDetailsByIdAsync(int id)
-            => await _context.Users.FindAsync(id); // add includes later
 
 
         public async Task<User> CreateAsync(User user)

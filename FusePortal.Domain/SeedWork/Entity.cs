@@ -4,7 +4,7 @@ namespace FusePortal.Domain.SeedWork
     {
         public int Id { get; protected set; }
 
-        private readonly List<INotification> _domainEvents = new();
+        private readonly List<INotification> _domainEvents = [];
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
 
         public void AddDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);

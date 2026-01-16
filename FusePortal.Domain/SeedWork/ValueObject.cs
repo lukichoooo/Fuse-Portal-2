@@ -8,7 +8,7 @@ namespace FusePortal.Domain.SeedWork
             {
                 return false;
             }
-            return ReferenceEquals(left, right) || left.Equals(right);
+            return ReferenceEquals(left, right) || left!.Equals(right);
         }
 
         protected static bool NotEqualOperator(ValueObject left, ValueObject right)
@@ -36,5 +36,11 @@ namespace FusePortal.Domain.SeedWork
                 .Select(x => (x?.GetHashCode()) ?? 0)
                 .Aggregate((x, y) => x ^ y);
         }
+
+        public static bool operator ==(ValueObject left, ValueObject right)
+            => EqualOperator(left, right);
+
+        public static bool operator !=(ValueObject left, ValueObject right)
+            => NotEqualOperator(left, right);
     }
 }

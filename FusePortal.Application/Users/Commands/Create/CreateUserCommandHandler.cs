@@ -12,7 +12,7 @@ namespace FusePortal.Application.Users.Commands.Create
 
         public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var addressDto = request.Dto.Address!;
+            var addressDto = request.Dto.Address;
 
             var user = new User(
                     request.Dto.Name,

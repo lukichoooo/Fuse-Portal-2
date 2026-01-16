@@ -21,7 +21,9 @@ namespace FusePortal.Application.Users
                 nameof(User.Name),
                 nameof(User.Address),
             ],
-            NestedFacets = [typeof(AddressDto)]),
+            NestedFacets = [typeof(AddressDto)],
+            NullableProperties = false
+            ),
     ]
     public partial record UserDetailsDto;
 
@@ -35,22 +37,20 @@ namespace FusePortal.Application.Users
                 nameof(User.Email),
                 nameof(User.PasswordHash),
             ],
-            NestedFacets = [typeof(AddressDto)]),
+            NestedFacets = [typeof(AddressDto)],
+            NullableProperties = false
+            ),
     ]
     public partial record UserCredentialsDto;
 
-    [Facet(typeof(User),
-           Include = [
-               nameof(User.Name),
-               nameof(User.Address),
-               nameof(User.Email),
-           ],
-           NestedFacets = [typeof(AddressDto)]),
-    ]
-    public partial class UserCreateDto
-    {
-        [MapFrom(nameof(User.PasswordHash))]
-        public string Password { get; set; } = string.Empty;
-    }
+
     // TODO create registration flow instead
+    public sealed class UserCreateCommandDto
+    {
+        public required string Name { get; init; }
+        public required string Email { get; init; }
+        public required string Password { get; init; }
+        public required AddressDto Address { get; init; }
+    }
+
 }

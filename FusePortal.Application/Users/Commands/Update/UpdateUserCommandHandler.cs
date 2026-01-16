@@ -18,8 +18,8 @@ namespace FusePortal.Application.Users.Commands.Update
             var user = await _repo.GetByIdAsync(request.Id)
                 ?? throw new UserNotFoundException($"User With Id={request.Id}, Not Found");
 
-            // TODO: passwords should be hashed
-            user.UpdateCredentials(request.Name, request.Email, request.Password);
+            // TODO: passwords should be compared
+            user.UpdateEmail(request.Email);
             user.ChangeAddress(request.Address.ToSource<AddressDto, Address>());
 
             await _repo.UpdateAsync(user);

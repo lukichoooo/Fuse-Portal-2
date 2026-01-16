@@ -8,7 +8,16 @@ namespace FusePortal.Application.Common
             [
                 nameof(Address.City),
                 nameof(Address.Country),
-            ]),
+            ],
+            GenerateToSource = true,
+            NullableProperties = false
+            ),
     ]
-    public partial record AddressDto;
+    public partial record AddressDto
+    {
+        public static implicit operator Address(AddressDto dto)
+            => new(
+                    country: dto.Country,
+                    city: dto.City);
+    }
 }

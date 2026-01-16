@@ -1,14 +1,25 @@
+using System.ComponentModel.DataAnnotations;
 using FusePortal.Domain.Common.ValueObjects;
 using FusePortal.Domain.SeedWork;
+using FusePortal.Domain.UserAggregate.UserDomainEvents;
 
 namespace FusePortal.Domain.UserAggregate
 {
     public sealed class User : Entity, IAggregateRoot
     {
+        [Required]
         public string Name { get; private set; }
+
+        [Required]
         public string Email { get; private set; }
+
+        [Required]
         public string PasswordHash { get; private set; }
+
+        [Required]
         public RoleType Role { get; private set; }
+
+        [Required]
         public Address Address { get; private set; }
 
 
@@ -24,46 +35,41 @@ namespace FusePortal.Domain.UserAggregate
             Address = address;
             Role = RoleType.Student;
 
-            // AddDomainEvent(new UserRegisteredEvent(Id, Email));
+            AddDomainEvent(new UserRegisteredEvent(Id, Name, Address));
         }
 
         public void ChangeAddress(Address newAddress)
         {
-            // TODO: idk if this is good
-            if (string.IsNullOrWhiteSpace(newAddress.City))
-                throw new ArgumentException("newAddress required");
-            if (string.IsNullOrWhiteSpace(newAddress.City))
-                throw new ArgumentException("City required");
-            if (string.IsNullOrWhiteSpace(newAddress.Country))
-                throw new ArgumentException("Country required");
-
             if (newAddress == Address)
                 return;
 
+            var oldAddress = Address;
+
             Address = newAddress;
-            // AddDomainEvent(new UserRegisteredEvent(Id, Email));
+            AddDomainEvent(new UserAddressChangedEvent(Id, oldAddress, newAddress));
         }
 
-        public void ChangeRoleTo(RoleType role)
+        public void ChangeRoleTo(RoleType newRole)
         {
-            Role = role;
-            // AddDomainEvent(new UserRegisteredEvent(Id, Email));
+            if (newRole == Role)
+                return;
+
+            var oldRole = Role;
+            Role = newRole;
+            AddDomainEvent(new UserRoleChangedEvent(Id, oldRole, newRole));
         }
 
-        public void UpdateCredentials(string name, string email, string passwordHash)
+        public void UpdateEmail(string newEmail)
         {
-            // TODO: maybe improve domain validation or remove it
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Name required");
-            if (string.IsNullOrWhiteSpace(email))
+            if (Email == newEmail)
+                return;
+
+            if (string.IsNullOrWhiteSpace(newEmail))
                 throw new ArgumentException("Email required");
-            if (string.IsNullOrWhiteSpace(passwordHash))
-                throw new ArgumentException("PasswordHash required");
 
-            Name = name;
-            Email = email;
-            PasswordHash = passwordHash;
-            // AddDomainEvent(new UserRegisteredEvent(Id, Email));
+            var oldEmail = Email;
+            Email = newEmail;
+            AddDomainEvent(new UserEmailChangedEvent(Id, oldEmail, newEmail));
         }
 
 
