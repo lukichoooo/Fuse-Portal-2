@@ -1,21 +1,21 @@
-
-
 using AutoFixture;
-using FusePortal.Application.Auth;
-using FusePortal.Application.Interfaces;
+using FusePortal.Application.Auth.LoginUser;
+using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Users.Exceptions;
 using FusePortal.Domain.Common.ValueObjects;
 using FusePortal.Domain.UserAggregate;
-using FusePortal.Infrastructure.Authenticatoin;
+using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace InfrastructureTests.AuthTests
+namespace ApplicationTests.AuthTests
 {
     [TestFixture]
-    public class AuthServiceTests
+    public class LoginUserCommandHandlerTests
     {
+        private readonly IUserRepo _repo;
+
         private IEncryptor _encryptor;
         private IJwtTokenGenerator _jwt;
 
@@ -49,7 +49,7 @@ namespace InfrastructureTests.AuthTests
             _jwt = new JwtTokenGenerator(generatorOptions);
         }
 
-        private AuthService CreateAuthService(IUserRepo repo)
+        private LoginUserCommandHandler CreateSut(IUserRepo repo)
             => new(repo, _encryptor, _jwt);
 
         [Test]
@@ -67,15 +67,15 @@ namespace InfrastructureTests.AuthTests
                 ))
                 .Create();
 
-            var login = new LoginRequest(user.Email, plainPassword);
+            var login = new LoginUserCommand(user.Email, plainPassword);
 
 
             var mock = new Mock<IUserRepo>();
             mock.Setup(r => r.GetByEmailAsync(login.Email))
                 .ReturnsAsync(() => user);
-            var auth = CreateAuthService(mock.Object);
+            var auth = CreateSut(mock.Object);
 
-            var res = await auth.LoginAsync(login);
+            var res = await auth.Handle(login, _fix.Create<CancellationToken>());
 
             Assert.That(res, Is.Not.Null);
             mock.Verify(r => r.GetByEmailAsync(login.Email), Times.Once());
@@ -85,15 +85,15 @@ namespace InfrastructureTests.AuthTests
         [Test]
         public async Task LoginAsync_NotFound_Throws()
         {
-            var login = _fix.Create<LoginRequest>();
+            var login = _fix.Create<LoginUserCommand>();
 
             var mock = new Mock<IUserRepo>();
             mock.Setup(r => r.GetByEmailAsync(login.Email))
                 .ReturnsAsync(() => null);
-            var auth = CreateAuthService(mock.Object);
+            var auth = CreateSut(mock.Object);
 
             Assert.ThrowsAsync<UserNotFoundException>(async () =>
-                    await auth.LoginAsync(login));
+                    await auth.Handle(login, _fix.Create<CancellationToken>()));
             mock.Verify(r => r.GetByEmailAsync(login.Email), Times.Once());
         }
 
@@ -102,48 +102,16 @@ namespace InfrastructureTests.AuthTests
         public async Task LoginAsync_WrongPassword_Throws()
         {
             var user = _fix.Create<User>();
-            var login = new LoginRequest(user.Email, user.PasswordHash);
+            var login = new LoginUserCommand(user.Email, user.PasswordHash);
 
             var mock = new Mock<IUserRepo>();
             mock.Setup(r => r.GetByEmailAsync(login.Email))
                 .ReturnsAsync(() => user);
-            var auth = CreateAuthService(mock.Object);
+            var auth = CreateSut(mock.Object);
 
             Assert.ThrowsAsync<UserWrongCredentialsException>(async () =>
-                    await auth.LoginAsync(login));
+                    await auth.Handle(login, _fix.Create<CancellationToken>()));
             mock.Verify(r => r.GetByEmailAsync(login.Email), Times.Once());
-        }
-
-        [Test]
-        public async Task RegisterAsync_Success()
-        {
-            var register = _fix.Create<RegisterRequest>();
-
-            var mock = new Mock<IUserRepo>();
-            mock.Setup(r => r.GetByEmailAsync(register.Email))
-                .ReturnsAsync(() => null);
-            var auth = CreateAuthService(mock.Object);
-
-            var res = await auth.RegisterAsync(register);
-
-            Assert.That(res, Is.Not.Null);
-            mock.Verify(r => r.GetByEmailAsync(register.Email), Times.Once());
-        }
-
-
-        [Test]
-        public async Task RegisterAsync_Exists_Throws()
-        {
-            var register = _fix.Create<RegisterRequest>();
-            var user = _fix.Create<User>();
-
-            var mock = new Mock<IUserRepo>();
-            mock.Setup(r => r.GetByEmailAsync(register.Email))
-                .ReturnsAsync(() => user);
-            var auth = CreateAuthService(mock.Object);
-
-            Assert.ThrowsAsync<UserAlreadyExistsException>(async () =>
-                    await auth.RegisterAsync(register));
         }
     }
 }

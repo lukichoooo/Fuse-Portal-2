@@ -16,6 +16,22 @@ namespace FusePortal.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.2");
 
+            modelBuilder.Entity("FusePortal.Domain.UniversityAggregate.University", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Universities");
+                });
+
             modelBuilder.Entity("FusePortal.Domain.UserAggregate.User", b =>
                 {
                     b.Property<int>("Id")
@@ -45,6 +61,50 @@ namespace FusePortal.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("UniversityUser", b =>
+                {
+                    b.Property<int>("StudentsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UniversitiesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("StudentsId", "UniversitiesId");
+
+                    b.HasIndex("UniversitiesId");
+
+                    b.ToTable("UniversityUser");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.UniversityAggregate.University", b =>
+                {
+                    b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("UniversityId")
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("UniversityId");
+
+                            b1.ToTable("Universities");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UniversityId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FusePortal.Domain.UserAggregate.User", b =>
                 {
                     b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address", "Address", b1 =>
@@ -71,6 +131,21 @@ namespace FusePortal.Infrastructure.Migrations
                         });
 
                     b.Navigation("Address")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UniversityUser", b =>
+                {
+                    b.HasOne("FusePortal.Domain.UserAggregate.User", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FusePortal.Domain.UniversityAggregate.University", null)
+                        .WithMany()
+                        .HasForeignKey("UniversitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

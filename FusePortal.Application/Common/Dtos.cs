@@ -16,8 +16,7 @@ namespace FusePortal.Application.Common
     public partial record AddressDto
     {
         public static implicit operator Address(AddressDto dto)
-            => new(
-                    country: dto.Country,
+            => new(country: dto.Country,
                     city: dto.City);
     }
 }

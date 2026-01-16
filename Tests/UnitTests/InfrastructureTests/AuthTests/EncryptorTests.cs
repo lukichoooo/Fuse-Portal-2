@@ -1,5 +1,5 @@
-using FusePortal.Application.Interfaces;
-using FusePortal.Infrastructure.Authenticatoin;
+using FusePortal.Application.Interfaces.Auth;
+using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;
 

@@ -1,4 +1,4 @@
-namespace FusePortal.Application.Interfaces
+namespace FusePortal.Application.Interfaces.Auth
 {
     public interface IEncryptor
     {

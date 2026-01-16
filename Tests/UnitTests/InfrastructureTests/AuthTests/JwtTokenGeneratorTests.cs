@@ -1,8 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoFixture;
-using FusePortal.Application.Interfaces;
+using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Domain.UserAggregate;
-using FusePortal.Infrastructure.Authenticatoin;
+using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;
 
@@ -42,9 +43,9 @@ namespace InfrastructureTests.AuthTests
             var token = handler.ReadJwtToken(tokenString);
             var claims = token.Claims;
 
-            var id = int.Parse(claims.FirstOrDefault(c => c.Type == "id")!.Value);
-            var email = claims.FirstOrDefault(c => c.Type == "email")!.Value;
-            var role = claims.FirstOrDefault(c => c.Type == "role")!.Value;
+            var id = int.Parse(claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value;
+            var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)!.Value;
 
             Assert.That(id, Is.EqualTo(user.Id));
             Assert.That(email, Is.EqualTo(user.Email));

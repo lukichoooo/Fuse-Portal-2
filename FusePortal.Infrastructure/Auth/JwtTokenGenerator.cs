@@ -1,14 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using FusePortal.Application.Interfaces;
+using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Domain.UserAggregate;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 
-namespace FusePortal.Infrastructure.Authenticatoin
+namespace FusePortal.Infrastructure.Auth
 {
     public class JwtTokenGenerator(IOptions<JwtSettings> options) : IJwtTokenGenerator
     {
@@ -24,9 +24,10 @@ namespace FusePortal.Infrastructure.Authenticatoin
                 audience: _jwtSettings.Audience,
                 claims:
                 [
-                    new Claim("id", user.Id.ToString()),
-                new Claim("email", user.Email),
-                new Claim("role", user.Role.ToString())
+
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.Role.ToString())
                 ],
                 expires: DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiration),
                 signingCredentials: credentials

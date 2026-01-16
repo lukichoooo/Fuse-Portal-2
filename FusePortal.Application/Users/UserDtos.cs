@@ -44,13 +44,4 @@ namespace FusePortal.Application.Users
     public partial record UserCredentialsDto;
 
 
-    // TODO create registration flow instead
-    public sealed class UserCreateCommandDto
-    {
-        public required string Name { get; init; }
-        public required string Email { get; init; }
-        public required string Password { get; init; }
-        public required AddressDto Address { get; init; }
-    }
-
 }

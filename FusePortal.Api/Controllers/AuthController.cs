@@ -14,12 +14,12 @@ namespace FusePortal.Api.Controllers
 
         [HttpPost("login")]
         public async Task<ActionResult<List<AuthResponse>>> LoginUser(
-                [FromBody] LoginRequest login)
-            => Ok(await _sender.Send(new LoginUserCommand(login)));
+                [FromBody] LoginUserCommand login)
+            => Ok(await _sender.Send(login));
 
         [HttpPost("register")]
         public async Task<ActionResult<List<AuthResponse>>> Register(
-                [FromBody] RegisterRequest register)
-            => Ok(await _sender.Send(new RegisterUserCommand(register)));
+                [FromBody] RegisterUserCommand register)
+            => Ok(await _sender.Send(register));
     }
 }

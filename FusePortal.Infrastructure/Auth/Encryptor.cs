@@ -1,10 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
-using FusePortal.Application.Interfaces;
+using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;
 
-namespace FusePortal.Infrastructure.Authenticatoin
+namespace FusePortal.Infrastructure.Auth
 {
     public class Encryptor : IEncryptor
     {

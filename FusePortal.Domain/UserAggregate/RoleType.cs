@@ -1,9 +1,8 @@
-namespace FusePortal.Domain.UserAggregate
+namespace FusePortal.Domain.UserAggregate;
+
+public enum RoleType
 {
-    public enum RoleType
-    {
-        Student = 0,
-        PremiumUser = 1,
-        Admin = 2,
-    }
+    Student = 0,
+    PremiumUser = 1,
+    Admin = 2,
 }

@@ -1,4 +1,3 @@
-namespace FusePortal.Domain.SeedWork
-{
-    public interface IAggregateRoot { }
-}
+namespace FusePortal.Domain.SeedWork;
+
+public interface IAggregateRoot { }

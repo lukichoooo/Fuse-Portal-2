@@ -1,4 +1,3 @@
-namespace FusePortal.Domain.SeedWork
-{
-    public interface INotification { }
-}
+namespace FusePortal.Domain.SeedWork;
+
+public interface INotification { }
