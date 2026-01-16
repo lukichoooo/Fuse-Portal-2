@@ -45,10 +45,10 @@ public sealed class User : Entity, IAggregateRoot
         string passwordHash,
         Address address)
     {
-        Name = name;
-        Email = email;
-        PasswordHash = passwordHash;
-        Address = address;
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Email = email ?? throw new ArgumentNullException(nameof(email));
+        PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
+        Address = address ?? throw new ArgumentNullException(nameof(address));
         Role = RoleType.Student;
 
         AddDomainEvent(new UserRegisteredEvent(Name, Email, Address));
@@ -81,7 +81,7 @@ public sealed class User : Entity, IAggregateRoot
             return;
 
         if (string.IsNullOrWhiteSpace(newEmail))
-            throw new ArgumentException("Email required");
+            throw new ArgumentException(nameof(newEmail));
 
         var oldEmail = Email;
         Email = newEmail;

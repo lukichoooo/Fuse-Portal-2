@@ -11,5 +11,11 @@ namespace FusePortal.Domain.SubjectAggregate
         [Required]
         public int SubjectId { get; private set; }
         public Subject? Subject { get; private set; }
+
+        public Lecturer(string name, int subjectId)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            SubjectId = subjectId;
+        }
     }
 }

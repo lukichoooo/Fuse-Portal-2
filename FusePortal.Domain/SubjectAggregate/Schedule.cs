@@ -17,5 +17,19 @@ namespace FusePortal.Domain.SubjectAggregate
 
         public string? Location { get; private set; }
         public string? Metadata { get; private set; }
+
+        public Schedule(
+                int subjectId,
+                DateTime start,
+                DateTime end,
+                string? location = null,
+                string? metadata = null)
+        {
+            Start = start;
+            End = end;
+            SubjectId = subjectId;
+            Location = location;
+            Metadata = metadata;
+        }
     }
 }

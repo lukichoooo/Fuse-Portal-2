@@ -6,6 +6,7 @@ namespace FusePortal.Domain.ChatAggregate
 {
     public class Message : Entity
     {
+        [Required]
         public string Text { get; private set; } = "";
 
         [Required]
@@ -20,5 +21,13 @@ namespace FusePortal.Domain.ChatAggregate
 
         private readonly List<FileEntity> _files;
         public IReadOnlyCollection<FileEntity> Files => _files.AsReadOnly();
+
+
+        public Message(string text, bool fromUser, int chatId)
+        {
+            Text = text ?? throw new ArgumentNullException(nameof(text));
+            FromUser = fromUser;
+            ChatId = chatId;
+        }
     }
 }

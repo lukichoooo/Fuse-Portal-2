@@ -19,5 +19,17 @@ namespace FusePortal.Domain.FileEntityAggregate
 
         public int? MessageId { get; private set; }
         public Message? Message { get; private set; }
+
+        public FileEntity(
+                string name,
+                string text,
+                int userId,
+                int? messageId = null)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Text = text ?? throw new ArgumentNullException(nameof(text));
+            UserId = userId;
+            MessageId = messageId;
+        }
     }
 }

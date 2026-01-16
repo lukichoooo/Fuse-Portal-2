@@ -18,5 +18,20 @@ namespace FusePortal.Domain.ExamAggregate
         [Required]
         public int SubjectId { get; private set; }
         public Subject? Subject { get; private set; }
+
+
+        public Exam(
+                string questions,
+                string answers,
+                int subjectid,
+                string? results = null,
+                int? scoreFrom100 = null)
+        {
+            Questions = questions ?? throw new ArgumentNullException(nameof(questions));
+            Answers = answers ?? throw new ArgumentNullException(nameof(answers));
+            SubjectId = subjectid;
+            Results = results;
+            ScoreFrom100 = scoreFrom100;
+        }
     }
 }

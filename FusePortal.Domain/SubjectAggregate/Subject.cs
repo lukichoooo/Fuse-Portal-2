@@ -25,6 +25,18 @@ namespace FusePortal.Domain.SubjectAggregate
 
         private readonly List<Syllabus> _syllabuses;
         public IReadOnlyCollection<Syllabus> Syllabuses => _syllabuses.AsReadOnly();
+
+        public Subject(
+                string name,
+                int userId,
+                int? grade = null,
+                string? metadata = null)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            UserId = userId;
+            Grade = grade;
+            Metadata = metadata;
+        }
     }
 }
 

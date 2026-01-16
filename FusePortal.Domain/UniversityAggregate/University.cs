@@ -20,12 +20,10 @@ public class University : Entity, IAggregateRoot
 
     public University(string name, Address address)
     {
-        Name = name;
-        Address = address;
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Address = address ?? throw new ArgumentNullException(nameof(address));
 
         AddDomainEvent(new UniversityCreatedEvent(Name, Address));
     }
 
-
-    private University() { }
 }
