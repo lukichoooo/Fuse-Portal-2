@@ -20,15 +20,15 @@ namespace FusePortal.Api.Controllers
 
         [HttpGet("all")]
         public async Task<ActionResult<List<UserDto>>> GetUsersPageAsync(
-               [FromQuery] int? lastId,
+               [FromQuery] Guid? lastId,
                [FromQuery] int? pageSize)
             => Ok(await _sender.Send(new GetUsersPageQuery(
                             lastId,
                             pageSize ?? _settings.DefaultPageSize)));
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<List<UserDto>>> CreateUser(
-                [FromRoute] int id)
+                [FromRoute] Guid id)
             => Ok(await _sender.Send(new GetUserByIdQuery(id)));
 
         [HttpPut("me")]

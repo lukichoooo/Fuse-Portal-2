@@ -1,8 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using MediatR;
+
 namespace FusePortal.Domain.SeedWork;
 
 public abstract class Entity
 {
-    public int Id { get; protected set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public Guid Id { get; protected set; }
 
     private readonly List<INotification> _domainEvents = [];
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
@@ -30,4 +34,10 @@ public abstract class Entity
 
     public static bool operator ==(Entity left, Entity right) => Equals(left, right);
     public static bool operator !=(Entity left, Entity right) => !Equals(left, right);
+
+
+    protected Entity()
+    {
+        Id = Guid.NewGuid(); // automatically assign a GUID
+    }
 }

@@ -1,6 +1,6 @@
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Users.Exceptions;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 
 namespace FusePortal.Infrastructure.Auth
 {

@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using FusePortal.Application.Interfaces.Auth;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

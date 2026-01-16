@@ -1,4 +1,4 @@
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 using FusePortal.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,15 +11,15 @@ namespace FusePortal.Infrastructure.Repo
         public Task<User?> GetByEmailAsync(string email)
             => _context.Users.FirstOrDefaultAsync(x => x.Email == email);
 
-        public ValueTask<User?> GetByIdAsync(int id)
+        public ValueTask<User?> GetByIdAsync(Guid id)
             => _context.Users.FindAsync(id);
 
 
-        public async Task<User?> GetUserDetailsByIdAsync(int id)
+        public async Task<User?> GetUserDetailsByIdAsync(Guid id)
             => await _context.Users.FindAsync(id); // add includes later
 
 
-        public async Task<List<User>> GetUsersPageAsync(int? lastId, int pageSize)
+        public async Task<List<User>> GetUsersPageAsync(Guid? lastId, int pageSize)
         {
             IQueryable<User> query = _context.Users;
 
@@ -32,25 +32,14 @@ namespace FusePortal.Infrastructure.Repo
                 .ToListAsync();
         }
 
-        public async Task UpdateAsync(User user)
-        {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> DeleteByIdAsync(int id)
+        public async Task DeleteByIdAsync(Guid id)
             => await _context.Users
                 .Where(u => u.Id == id)
                 .ExecuteDeleteAsync();
 
 
-        public async Task<User> CreateAsync(User user)
-        {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
-        }
-
+        public async Task AddAsync(User user)
+            => await _context.Users.AddAsync(user);
 
     }
 }

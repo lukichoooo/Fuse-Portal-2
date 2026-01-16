@@ -3,7 +3,7 @@ using FusePortal.Application.Auth.LoginUser;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Users.Exceptions;
 using FusePortal.Domain.Common.ValueObjects;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;

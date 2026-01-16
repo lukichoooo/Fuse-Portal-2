@@ -1,4 +1,4 @@
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 
 namespace FusePortal.Application.Interfaces.Auth
 {

@@ -1,4 +1,4 @@
-using FusePortal.Domain.UniversityAggregate;
+using FusePortal.Domain.Entities.UniversityAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

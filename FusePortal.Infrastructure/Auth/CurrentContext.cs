@@ -13,7 +13,7 @@ namespace FusePortal.Infrastructure.Auth
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int GetCurrentUserId()
+        public Guid GetCurrentUserId()
         {
             var httpContext = _httpContextAccessor.HttpContext
                 ?? throw new InvalidOperationException("No active HttpContext.");
@@ -25,7 +25,7 @@ namespace FusePortal.Infrastructure.Auth
             var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)
                 ?? throw new UnauthorizedAccessException("User id claim is missing.");
 
-            if (!int.TryParse(idClaim.Value, out var userId))
+            if (!Guid.TryParse(idClaim.Value, out var userId))
                 throw new UnauthorizedAccessException("User id claim is invalid.");
 
             return userId;

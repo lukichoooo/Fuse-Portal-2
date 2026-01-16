@@ -1,6 +1,6 @@
 using Facet;
 using FusePortal.Application.Common;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 
 namespace FusePortal.Application.Users
 {

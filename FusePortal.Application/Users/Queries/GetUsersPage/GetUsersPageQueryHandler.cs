@@ -1,5 +1,5 @@
 using Facet.Extensions;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 using MediatR;
 
 namespace FusePortal.Application.Users.Queries.GetUsersPage

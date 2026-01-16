@@ -3,7 +3,7 @@ using FusePortal.Application.Common;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Users.Exceptions;
 using FusePortal.Domain.Common.ValueObjects;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 using MediatR;
 
 namespace FusePortal.Application.Users.Commands.Update
@@ -11,12 +11,14 @@ namespace FusePortal.Application.Users.Commands.Update
     public class UpdateUserCommandHandler(
             IUserRepo repo,
             ICurrentContext currContext,
-            IUserSecurityService userSecurity)
+            IUserSecurityService userSecurity,
+            IUnitOfWork uow)
         : IRequestHandler<UpdateUserCommand, UserDto>
     {
         private readonly IUserRepo _repo = repo;
         private readonly ICurrentContext _currContext = currContext;
         private readonly IUserSecurityService _userSecurity = userSecurity;
+        private readonly IUnitOfWork _uow = uow;
 
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
@@ -34,7 +36,7 @@ namespace FusePortal.Application.Users.Commands.Update
             user.UpdateEmail(request.Email);
             user.ChangeAddress(request.Address.ToSource<AddressDto, Address>());
 
-            await _repo.UpdateAsync(user);
+            await _uow.CommitAsync();
             return user.ToFacet<User, UserDto>();
         }
     }

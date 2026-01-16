@@ -2,5 +2,7 @@ using MediatR;
 
 namespace FusePortal.Application.Users.Queries.GetUserById
 {
-    public record GetUserByIdQuery(int Id) : IRequest<UserDetailsDto> { }
+    public record GetUserByIdQuery(
+            Guid Id
+            ) : IRequest<UserDetailsDto>;
 }

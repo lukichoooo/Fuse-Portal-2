@@ -1,6 +1,6 @@
 using Facet.Extensions;
 using FusePortal.Application.Users.Exceptions;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 using MediatR;
 
 namespace FusePortal.Application.Users.Queries.GetUserById

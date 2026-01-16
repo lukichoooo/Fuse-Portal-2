@@ -1,3 +1,4 @@
+using FusePortal.Api.Settings;
 using FusePortal.Application;
 using FusePortal.Infrastructure;
 
@@ -7,6 +8,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+
+builder.Services.Configure<ControllerSettings>(
+        builder.Configuration.GetSection("ControllerSettings"));
 
 var app = builder.Build();
 

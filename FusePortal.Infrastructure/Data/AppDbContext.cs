@@ -1,9 +1,9 @@
 using System.Reflection;
-using FusePortal.Domain.ChatAggregate;
-using FusePortal.Domain.FileEntityAggregate;
-using FusePortal.Domain.SubjectAggregate;
-using FusePortal.Domain.UniversityAggregate;
-using FusePortal.Domain.UserAggregate;
+using FusePortal.Domain.Entities.ChatAggregate;
+using FusePortal.Domain.Entities.FileEntityAggregate;
+using FusePortal.Domain.Entities.SubjectAggregate;
+using FusePortal.Domain.Entities.UniversityAggregate;
+using FusePortal.Domain.Entities.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace FusePortal.Infrastructure.Data
