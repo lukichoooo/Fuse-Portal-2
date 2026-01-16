@@ -119,8 +119,8 @@ namespace FusePortal.Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Text = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ChatId = table.Column<int>(type: "INTEGER", nullable: false),
-                    FromUser = table.Column<bool>(type: "INTEGER", nullable: false)
+                    FromUser = table.Column<bool>(type: "INTEGER", nullable: false),
+                    ChatId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

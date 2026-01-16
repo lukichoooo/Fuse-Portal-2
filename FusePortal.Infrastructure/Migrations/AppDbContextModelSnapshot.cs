@@ -259,7 +259,7 @@ namespace FusePortal.Infrastructure.Migrations
             modelBuilder.Entity("FusePortal.Domain.ChatAggregate.Chat", b =>
                 {
                     b.HasOne("FusePortal.Domain.UserAggregate.User", "User")
-                        .WithMany()
+                        .WithMany("Chats")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -281,11 +281,11 @@ namespace FusePortal.Infrastructure.Migrations
             modelBuilder.Entity("FusePortal.Domain.FileEntityAggregate.FileEntity", b =>
                 {
                     b.HasOne("FusePortal.Domain.ChatAggregate.Message", "Message")
-                        .WithMany()
+                        .WithMany("Files")
                         .HasForeignKey("MessageId");
 
                     b.HasOne("FusePortal.Domain.UserAggregate.User", "User")
-                        .WithMany()
+                        .WithMany("FileEntities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -320,7 +320,7 @@ namespace FusePortal.Infrastructure.Migrations
             modelBuilder.Entity("FusePortal.Domain.SubjectAggregate.Subject", b =>
                 {
                     b.HasOne("FusePortal.Domain.UserAggregate.User", "User")
-                        .WithMany()
+                        .WithMany("Subjects")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -417,6 +417,11 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Navigation("Messages");
                 });
 
+            modelBuilder.Entity("FusePortal.Domain.ChatAggregate.Message", b =>
+                {
+                    b.Navigation("Files");
+                });
+
             modelBuilder.Entity("FusePortal.Domain.SubjectAggregate.Subject", b =>
                 {
                     b.Navigation("Lecturers");
@@ -424,6 +429,15 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Navigation("Schedules");
 
                     b.Navigation("Syllabuses");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.UserAggregate.User", b =>
+                {
+                    b.Navigation("Chats");
+
+                    b.Navigation("FileEntities");
+
+                    b.Navigation("Subjects");
                 });
 #pragma warning restore 612, 618
         }

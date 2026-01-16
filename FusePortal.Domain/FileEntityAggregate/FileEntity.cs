@@ -8,16 +8,16 @@ namespace FusePortal.Domain.FileEntityAggregate
     public class FileEntity : Entity, IAggregateRoot
     {
         [Required]
-        public required string Name { get; set; } = null!;
+        public string Name { get; private set; }
 
         [Required]
-        public required string Text { get; set; } = null!;
+        public string Text { get; private set; }
 
         [Required]
-        public required int UserId { get; set; }
-        public User? User { get; set; }
+        public int UserId { get; private set; }
+        public User? User { get; private set; }
 
-        public int? MessageId { get; set; }
-        public Message? Message { get; set; }
+        public int? MessageId { get; private set; }
+        public Message? Message { get; private set; }
     }
 }

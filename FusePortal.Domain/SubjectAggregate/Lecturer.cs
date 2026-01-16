@@ -5,10 +5,11 @@ namespace FusePortal.Domain.SubjectAggregate
 {
     public class Lecturer : Entity
     {
-        public required string Name { get; set; }
+        [Required]
+        public string Name { get; private set; }
 
         [Required]
-        public required int SubjectId { get; set; }
-        public Subject? Subject { get; set; }
+        public int SubjectId { get; private set; }
+        public Subject? Subject { get; private set; }
     }
 }

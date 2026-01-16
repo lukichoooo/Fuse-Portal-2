@@ -6,19 +6,19 @@ namespace FusePortal.Domain.ChatAggregate
 {
     public class Message : Entity
     {
-        public string Text { get; set; } = "";
+        public string Text { get; private set; } = "";
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
         [Required]
-        public required int ChatId { get; set; }
+        public bool FromUser { get; private set; }
 
         [Required]
-        public required bool FromUser { get; set; }
+        public int ChatId { get; private set; }
+        public Chat Chat { get; private set; }
 
-        public Chat Chat { get; set; } = null!;
-
-        public List<FileEntity> Files = [];
+        private readonly List<FileEntity> _files;
+        public IReadOnlyCollection<FileEntity> Files => _files.AsReadOnly();
     }
 }

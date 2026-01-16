@@ -5,14 +5,17 @@ namespace FusePortal.Domain.SubjectAggregate
 {
     public class Schedule : Entity
     {
-        public required DateTime Start { get; set; }
-        public required DateTime End { get; set; }
+        [Required]
+        public DateTime Start { get; private set; }
 
         [Required]
-        public required int SubjectId { get; set; }
-        public Subject? Subject { get; set; }
+        public DateTime End { get; private set; }
 
-        public string? Location { get; set; }
-        public string? Metadata { get; set; }
+        [Required]
+        public int SubjectId { get; private set; }
+        public Subject? Subject { get; private set; }
+
+        public string? Location { get; private set; }
+        public string? Metadata { get; private set; }
     }
 }
