@@ -7,18 +7,18 @@ namespace FusePortal.Application.Chats.Queries.GetChatsPage
 {
     public class GetChatsPageQueryHandler(
             IChatRepo repo,
-            ICurrentContext currContext
+            IIdentityProvider identity
             )
         : IRequestHandler<GetChatsPageQuery, List<ChatDto>>
     {
         private readonly IChatRepo _repo = repo;
-        private readonly ICurrentContext _currContext = currContext;
+        private readonly IIdentityProvider _identity = identity;
 
         public async Task<List<ChatDto>> Handle(
                 GetChatsPageQuery request,
                 CancellationToken cancellationToken)
         {
-            var userId = _currContext.GetCurrentUserId();
+            var userId = _identity.GetCurrentUserId();
             var chats = await _repo.GetAllChatsForUserPageAsync(
                     request.LastId,
                     request.PageSize,

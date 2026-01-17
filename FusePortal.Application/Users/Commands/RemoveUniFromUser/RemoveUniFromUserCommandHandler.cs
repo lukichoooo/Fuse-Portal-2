@@ -12,22 +12,22 @@ namespace FusePortal.Application.Users.Commands.RemoveUniFromUser
     {
         private readonly IUserRepo _userRepo;
         private readonly IUniRepo _uniRepo;
-        private readonly ICurrentContext _currContext;
+        private readonly IIdentityProvider _identity;
 
         public RemoveUniFromUserCommandHandler(
                 IUserRepo userRepo,
                 IUniRepo uniRepo,
-                ICurrentContext currContext,
+                IIdentityProvider identity,
                 IUnitOfWork uow) : base(uow)
         {
             _userRepo = userRepo;
             _uniRepo = uniRepo;
-            _currContext = currContext;
+            _identity = identity;
         }
 
         protected override async Task ExecuteAsync(RemoveUniFromUserCommand request, CancellationToken cancellationToken)
         {
-            Guid userId = _currContext.GetCurrentUserId();
+            Guid userId = _identity.GetCurrentUserId();
 
             var user = await _userRepo.GetUserWithUnisByIdAsync(userId)
                 ?? throw new UserNotFoundException($"User With Id={userId}, Not Found");

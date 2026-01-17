@@ -1,7 +1,7 @@
 using FusePortal.Application.Interfaces.EventDispatcher;
 using MediatR;
 
-namespace FusePortal.Infrastructure.Messaging
+namespace FusePortal.Infrastructure.EventDispatcher
 {
     public class DomainEventDispatcher(IMediator mediator) : IDomainEventDispatcher
     {

@@ -9,21 +9,21 @@ namespace FusePortal.Application.Users.Commands.Delete
     public class DeleteUserCommandHandler : BaseCommandHandler<DeleteUserCommand>
     {
         private readonly IUserRepo _repo;
-        private readonly ICurrentContext _currContext;
+        private readonly IIdentityProvider _identity;
 
         public DeleteUserCommandHandler(
             IUserRepo repo,
-            ICurrentContext currContext,
+            IIdentityProvider identity,
             IUnitOfWork uow)
             : base(uow)
         {
             _repo = repo;
-            _currContext = currContext;
+            _identity = identity;
         }
 
         protected override async Task ExecuteAsync(DeleteUserCommand request, CancellationToken cancellationToken)
         {
-            if (request.Id != _currContext.GetCurrentUserId())
+            if (request.Id != _identity.GetCurrentUserId())
             {
                 throw new UnauthorizedAccessException(
                         $"not authorized to delete user with Id={request.Id}");

@@ -4,14 +4,11 @@ using Microsoft.AspNetCore.Http;
 
 namespace FusePortal.Infrastructure.Auth
 {
-    public sealed class CurrentContext : ICurrentContext
+    public sealed class IdentityProvider(
+            IHttpContextAccessor httpContextAccessor)
+        : IIdentityProvider
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CurrentContext(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public Guid GetCurrentUserId()
         {

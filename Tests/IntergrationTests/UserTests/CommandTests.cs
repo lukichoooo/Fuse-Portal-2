@@ -61,8 +61,9 @@ namespace IntergrationTests.UserTests
             await uniRepo.AddAsync(uni);
 
 
-            var currContextMock = new Mock<ICurrentContext>();
-            currContextMock.Setup(c => c.GetCurrentUserId())
+
+            var identityMock = new Mock<IIdentityProvider>();
+            identityMock.Setup(c => c.GetCurrentUserId())
                 .Returns(user.Id);
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
@@ -75,7 +76,7 @@ namespace IntergrationTests.UserTests
             var sut = new AddUniToUserCommandHandler(
                     userRepo,
                     uniRepo,
-                    currContextMock.Object,
+                    identityMock.Object,
                     uow);
             await _context.SaveChangesAsync();
 
@@ -105,8 +106,8 @@ namespace IntergrationTests.UserTests
             await uniRepo.AddAsync(uni);
 
 
-            var currContextMock = new Mock<ICurrentContext>();
-            currContextMock.Setup(c => c.GetCurrentUserId())
+            var identityMock = new Mock<IIdentityProvider>();
+            identityMock.Setup(c => c.GetCurrentUserId())
                 .Returns(user.Id);
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
@@ -119,7 +120,7 @@ namespace IntergrationTests.UserTests
             var sut = new AddUniToUserCommandHandler(
                     userRepo,
                     uniRepo,
-                    currContextMock.Object,
+                    identityMock.Object,
                     uow);
             user.AddUniversity(uni);
 
@@ -151,8 +152,8 @@ namespace IntergrationTests.UserTests
             var uniRepo = new UniRepo(_context);
             await uniRepo.AddAsync(uni);
 
-            var currContextMock = new Mock<ICurrentContext>();
-            currContextMock.Setup(c => c.GetCurrentUserId())
+            var identityMock = new Mock<IIdentityProvider>();
+            identityMock.Setup(c => c.GetCurrentUserId())
                 .Returns(user.Id);
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
@@ -165,7 +166,7 @@ namespace IntergrationTests.UserTests
             var sut = new RemoveUniFromUserCommandHandler(
                     userRepo,
                     uniRepo,
-                    currContextMock.Object,
+                    identityMock.Object,
                     uow);
             user.AddUniversity(uni);
 
@@ -192,8 +193,8 @@ namespace IntergrationTests.UserTests
             var uniRepo = new UniRepo(_context);
             await uniRepo.AddAsync(uni);
 
-            var currContextMock = new Mock<ICurrentContext>();
-            currContextMock.Setup(c => c.GetCurrentUserId())
+            var identityMock = new Mock<IIdentityProvider>();
+            identityMock.Setup(c => c.GetCurrentUserId())
                 .Returns(user.Id);
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
@@ -206,7 +207,7 @@ namespace IntergrationTests.UserTests
             var sut = new RemoveUniFromUserCommandHandler(
                     userRepo,
                     uniRepo,
-                    currContextMock.Object,
+                    identityMock.Object,
                     uow);
 
             await _context.SaveChangesAsync();

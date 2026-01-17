@@ -46,8 +46,10 @@ namespace ApplicationTests.UserTests.Commands
             _security = new UserSecurityService(_encryptor);
         }
 
-        private UpdateUserCommandHandler CreateSut(IUserRepo repo, ICurrentContext current)
-            => new(repo, current, _security, _uow);
+        private UpdateUserCommandHandler CreateSut(
+                IUserRepo repo,
+                IIdentityProvider identity)
+            => new(repo, identity, _security, _uow);
 
         [Test]
         public async Task Handle_Success()
@@ -76,11 +78,11 @@ namespace ApplicationTests.UserTests.Commands
             mock.Setup(r => r.GetByIdAsync(user.Id))
                 .ReturnsAsync(() => user);
 
-            var contextMock = new Mock<ICurrentContext>();
-            contextMock.Setup(x => x.GetCurrentUserId())
+            var identityMock = new Mock<IIdentityProvider>();
+            identityMock.Setup(x => x.GetCurrentUserId())
                 .Returns(user.Id);
 
-            var sut = CreateSut(mock.Object, contextMock.Object);
+            var sut = CreateSut(mock.Object, identityMock.Object);
 
             await sut.Handle(update, _fix.Create<CancellationToken>());
 
@@ -116,11 +118,11 @@ namespace ApplicationTests.UserTests.Commands
             mock.Setup(r => r.GetByIdAsync(user.Id))
                 .ReturnsAsync(() => null);
 
-            var contextMock = new Mock<ICurrentContext>();
-            contextMock.Setup(x => x.GetCurrentUserId())
+            var identityMock = new Mock<IIdentityProvider>();
+            identityMock.Setup(x => x.GetCurrentUserId())
                 .Returns(user.Id);
 
-            var sut = CreateSut(mock.Object, contextMock.Object);
+            var sut = CreateSut(mock.Object, identityMock.Object);
 
             Assert.ThrowsAsync<UserNotFoundException>(async () =>
                     await sut.Handle(update, _fix.Create<CancellationToken>()));
@@ -156,7 +158,7 @@ namespace ApplicationTests.UserTests.Commands
             mock.Setup(r => r.GetByIdAsync(user.Id))
                 .ReturnsAsync(() => user);
 
-            var contextMock = new Mock<ICurrentContext>();
+            var contextMock = new Mock<IIdentityProvider>();
             contextMock.Setup(x => x.GetCurrentUserId())
                 .Returns(user.Id);
 

@@ -7,11 +7,11 @@ using FusePortal.Infrastructure.Repo;
 using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using FusePortal.Application.Interfaces.Auth;
-using FusePortal.Infrastructure.Messaging;
 using FusePortal.Domain.Entities.UserAggregate;
 using FusePortal.Application.Common;
 using FusePortal.Domain.Entities.UniversityAggregate;
 using FusePortal.Application.Interfaces.EventDispatcher;
+using FusePortal.Infrastructure.EventDispatcher;
 
 namespace FusePortal.Infrastructure
 {
@@ -33,7 +33,7 @@ namespace FusePortal.Infrastructure
             // auth
             services.AddHttpContextAccessor();
             services.AddScoped<IUserSecurityService, UserSecurityService>();
-            services.AddScoped<ICurrentContext, CurrentContext>();
+            services.AddScoped<IIdentityProvider, IdentityProvider>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IEncryptor, Encryptor>();
 

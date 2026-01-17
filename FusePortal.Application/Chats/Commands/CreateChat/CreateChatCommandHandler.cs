@@ -8,11 +8,11 @@ namespace FusePortal.Application.Chats.Commands.CreateChat
     public class CreateChatCommandHandler : BaseCommandHandler<CreateChatCommand>
     {
         private readonly IChatRepo _repo;
-        private readonly ICurrentContext _currentContext;
+        private readonly IIdentityProvider _currentContext;
 
         public CreateChatCommandHandler(
                 IChatRepo repo,
-                ICurrentContext currentContext,
+                IIdentityProvider currentContext,
                 IUnitOfWork uow) : base(uow)
         {
             _repo = repo;
