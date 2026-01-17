@@ -1,4 +1,4 @@
-using FusePortal.Domain.Common.ValueObjects;
+using FusePortal.Domain.Common.ValueObjects.Address;
 using MediatR;
 
 namespace FusePortal.Domain.Entities.UniversityAggregate.UniversityDomainEvents;

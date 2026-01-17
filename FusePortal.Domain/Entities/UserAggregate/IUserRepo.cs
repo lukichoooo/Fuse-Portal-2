@@ -4,12 +4,14 @@ namespace FusePortal.Domain.Entities.UserAggregate
 {
     public interface IUserRepo : IRepository<User>
     {
-        Task<User?> GetUserDetailsByIdAsync(Guid id);
-        ValueTask<User?> GetByIdAsync(Guid id);
-        Task<User?> GetByEmailAsync(string email);
         Task AddAsync(User user);
-        Task DeleteByIdAsync(Guid id);
-        Task<List<User>> GetUsersPageAsync(Guid? lastId, int pageSize);
+        void Remove(User user);
+
+        Task<User?> GetUserWithUnisByIdAsync(Guid id);
+        ValueTask<User?> GetByIdAsync(Guid id);
+
+        Task<User?> GetByEmailAsync(string email);
+        Task<List<User>> GetPageAsync(Guid? lastId, int pageSize);
     }
 }
 

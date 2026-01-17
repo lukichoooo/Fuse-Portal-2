@@ -1,24 +1,32 @@
 using FusePortal.Application.Common;
+using FusePortal.Application.Common.SeedWork;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Users.Exceptions;
 using FusePortal.Domain.Entities.UserAggregate;
-using MediatR;
 
 namespace FusePortal.Application.Auth.RegisterUser
 {
-    public class RegisterUserCommandHandler(
-            IUserRepo repo,
-            IEncryptor encryptor,
-            IJwtTokenGenerator jwt,
-            IUnitOfWork uow
-            ) : IRequestHandler<RegisterUserCommand, AuthResponse>
+    public class RegisterUserCommandHandler : BaseCommandHandler<RegisterUserCommand, AuthResponse>
     {
-        private readonly IUserRepo _repo = repo;
-        private readonly IEncryptor _encryptor = encryptor;
-        private readonly IJwtTokenGenerator _jwt = jwt;
-        private readonly IUnitOfWork _uow = uow;
+        private readonly IUserRepo _repo;
+        private readonly IEncryptor _encryptor;
+        private readonly IJwtTokenGenerator _jwt;
+        private readonly IUnitOfWork _uow;
 
-        public async Task<AuthResponse> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public RegisterUserCommandHandler(
+                IUserRepo repo,
+                IEncryptor encryptor,
+                IJwtTokenGenerator jwt,
+                IUnitOfWork uow
+                ) : base(uow)
+        {
+            _repo = repo;
+            _encryptor = encryptor;
+            _jwt = jwt;
+        }
+
+
+        protected override async Task<AuthResponse> ExecuteAsync(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var dbuser = await _repo.GetByEmailAsync(request.Email);
             if (dbuser is not null)
@@ -31,9 +39,6 @@ namespace FusePortal.Application.Auth.RegisterUser
                     address: request.Address);
 
             await _repo.AddAsync(user);
-
-            await _uow.CommitAsync(cancellationToken);
-
             return new AuthResponse(_jwt.GenerateToken(user), null!);
         }
     }

@@ -1,21 +1,27 @@
 using FusePortal.Application.Common;
+using FusePortal.Application.Common.SeedWork;
 using FusePortal.Application.Interfaces.Auth;
+using FusePortal.Application.Users.Exceptions;
 using FusePortal.Domain.Entities.UserAggregate;
-using MediatR;
 
 namespace FusePortal.Application.Users.Commands.Delete
 {
-    public class DeleteUserCommandHandler(
+    public class DeleteUserCommandHandler : BaseCommandHandler<DeleteUserCommand>
+    {
+        private readonly IUserRepo _repo;
+        private readonly ICurrentContext _currContext;
+
+        public DeleteUserCommandHandler(
             IUserRepo repo,
             ICurrentContext currContext,
             IUnitOfWork uow)
-        : IRequestHandler<DeleteUserCommand>
-    {
-        private readonly IUserRepo _repo = repo;
-        private readonly ICurrentContext _currContext = currContext;
-        private readonly IUnitOfWork _uow = uow;
+            : base(uow)
+        {
+            _repo = repo;
+            _currContext = currContext;
+        }
 
-        public async Task Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        protected override async Task ExecuteAsync(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             if (request.Id != _currContext.GetCurrentUserId())
             {
@@ -23,8 +29,10 @@ namespace FusePortal.Application.Users.Commands.Delete
                         $"not authorized to delete user with Id={request.Id}");
             }
 
-            await _repo.DeleteByIdAsync(request.Id);
-            await _uow.CommitAsync();
+            var user = await _repo.GetByIdAsync(request.Id)
+                ?? throw new UserNotFoundException($"User With Id={request.Id}, Not Found");
+
+            _repo.Remove(user);
         }
     }
 }

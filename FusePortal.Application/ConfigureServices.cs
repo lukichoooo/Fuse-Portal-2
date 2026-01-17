@@ -18,6 +18,7 @@ namespace FusePortal.Application
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             });
 
+
             return services;
         }
     }

@@ -14,7 +14,8 @@ namespace FusePortal.Infrastructure.Data
         public DbSet<University> Universities { get; set; }
         public DbSet<Subject> Exams { get; set; }
         public DbSet<Chat> Chats { get; set; }
-        public DbSet<FileEntity> FileEntities { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<FileEntity> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

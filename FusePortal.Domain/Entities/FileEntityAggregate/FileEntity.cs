@@ -26,8 +26,8 @@ namespace FusePortal.Domain.Entities.FileEntityAggregate
                 Guid userId,
                 Guid? messageId = null)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Text = text ?? throw new ArgumentNullException(nameof(text));
+            Name = name ?? throw new FileDomainException($"field cant be null or empty: {nameof(name)}");
+            Text = text ?? throw new FileDomainException($"field cant be null or empty: {nameof(text)}");
             UserId = userId;
             MessageId = messageId;
         }

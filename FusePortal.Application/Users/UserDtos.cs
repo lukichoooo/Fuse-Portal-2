@@ -1,5 +1,5 @@
 using Facet;
-using FusePortal.Application.Common;
+using FusePortal.Application.Unis;
 using FusePortal.Domain.Entities.UserAggregate;
 
 namespace FusePortal.Application.Users
@@ -20,10 +20,7 @@ namespace FusePortal.Application.Users
                 nameof(User.Id),
                 nameof(User.Name),
                 nameof(User.Address),
-            ],
-            NestedFacets = [typeof(AddressDto)],
-            NullableProperties = false
-            ),
+            ]),
     ]
     public partial record UserDetailsDto;
 
@@ -34,12 +31,27 @@ namespace FusePortal.Application.Users
                 nameof(User.Id),
                 nameof(User.Name),
                 nameof(User.Address),
-                nameof(User.Email),
-                nameof(User.PasswordHash),
+                nameof(User.Universities),
             ],
-            NestedFacets = [typeof(AddressDto)],
+            NestedFacets =
+            [
+                typeof(UniDto),
+            ],
             NullableProperties = false
             ),
+    ]
+    public partial record UserWithUniDto;
+
+
+    [Facet(typeof(User),
+            Include =
+            [
+                nameof(User.Id),
+                nameof(User.Name),
+                nameof(User.Address),
+                nameof(User.Email),
+                nameof(User.PasswordHash),
+            ]),
     ]
     public partial record UserCredentialsDto;
 

@@ -27,8 +27,8 @@ namespace FusePortal.Domain.Entities.ExamAggregate
                 string? results = null,
                 int? scoreFrom100 = null)
         {
-            Questions = questions ?? throw new ArgumentNullException(nameof(questions));
-            Answers = answers ?? throw new ArgumentNullException(nameof(answers));
+            Questions = questions ?? throw new ExamDomainException($"field cant be null or empty: {nameof(questions)}");
+            Answers = answers ?? throw new ExamDomainException($"field cant be null or empty: {nameof(answers)}");
             SubjectId = subjectid;
             Results = results;
             ScoreFrom100 = scoreFrom100;

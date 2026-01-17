@@ -1,6 +1,6 @@
 using FluentValidation;
-using FusePortal.Application.Common.DtoValidators;
 using FusePortal.Application.Common.Settings;
+using FusePortal.Application.Common.Validators;
 using Microsoft.Extensions.Options;
 
 namespace FusePortal.Application.Users.Commands.Update
@@ -15,13 +15,18 @@ namespace FusePortal.Application.Users.Commands.Update
                 .NotEmpty()
                 .EmailAddress();
 
-            RuleFor(x => x.Password)
+            RuleFor(x => x.CurrentPassword)
+                .NotEmpty()
+                .MinimumLength(config.PasswordMinLength)
+                .MaximumLength(config.PasswordMaxLength);
+
+            RuleFor(x => x.NewPassword)
                 .NotEmpty()
                 .MinimumLength(config.PasswordMinLength)
                 .MaximumLength(config.PasswordMaxLength);
 
             RuleFor(x => x.Address)
-                .SetValidator(new AddressDtoValidator());
+                .SetValidator(new AddressValidator());
         }
     }
 }

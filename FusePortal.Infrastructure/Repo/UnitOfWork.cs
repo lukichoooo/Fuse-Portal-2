@@ -1,22 +1,16 @@
 using FusePortal.Application.Common;
-using FusePortal.Application.Interfaces.Messaging;
+using FusePortal.Application.Interfaces.EventDispatcher;
 using FusePortal.Domain.SeedWork;
 using FusePortal.Infrastructure.Data;
 
 namespace FusePortal.Infrastructure.Repo
 {
-    public sealed class EfUnitOfWork : IUnitOfWork
+    public sealed class EfUnitOfWork(
+        AppDbContext context,
+        IDomainEventDispatcher dispatcher) : IUnitOfWork
     {
-        private readonly AppDbContext _context;
-        private readonly IDomainEventDispatcher _dispatcher;
-
-        public EfUnitOfWork(
-            AppDbContext context,
-            IDomainEventDispatcher dispatcher)
-        {
-            _context = context;
-            _dispatcher = dispatcher;
-        }
+        private readonly AppDbContext _context = context;
+        private readonly IDomainEventDispatcher _dispatcher = dispatcher;
 
         public async Task CommitAsync(CancellationToken ct = default)
         {

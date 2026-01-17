@@ -19,15 +19,31 @@ namespace FusePortal.Domain.Entities.ChatAggregate
         public Guid ChatId { get; private set; }
         public Chat Chat { get; private set; }
 
-        private readonly List<FileEntity> _files;
+        private readonly List<FileEntity> _files = [];
         public IReadOnlyCollection<FileEntity> Files => _files.AsReadOnly();
 
 
         public Message(string text, bool fromUser, Guid chatId)
         {
-            Text = text ?? throw new ArgumentNullException(nameof(text));
+            Text = text ?? throw new ChatDomainException($"Field Can't be Null or Empty: {nameof(text)}");
             FromUser = fromUser;
             ChatId = chatId;
+        }
+
+        public void AttachFile(FileEntity file)
+        {
+            if (_files.Contains(file))
+                return;
+
+            _files.Add(file);
+        }
+
+        public void DetachFile(FileEntity file)
+        {
+            if (!_files.Contains(file))
+                return;
+
+            _files.Remove(file);
         }
 
 

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using FusePortal.Domain.Common.ValueObjects;
+using FusePortal.Domain.Common.ValueObjects.Address;
 using FusePortal.Domain.Entities.UniversityAggregate.UniversityDomainEvents;
 using FusePortal.Domain.Entities.UserAggregate;
 using FusePortal.Domain.SeedWork;
@@ -20,8 +20,8 @@ public class University : Entity, IAggregateRoot
 
     public University(string name, Address address)
     {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
-        Address = address ?? throw new ArgumentNullException(nameof(address));
+        Name = name ?? throw new UniversityDomainException($"field cant be null or empty: {nameof(name)}");
+        Address = address ?? throw new UniversityDomainException($"field cant be null or empty: {nameof(address)}");
 
         AddDomainEvent(new UniversityCreatedEvent(Id, Name, Address));
     }

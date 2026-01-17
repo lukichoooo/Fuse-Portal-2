@@ -1,6 +1,6 @@
 using FluentValidation;
-using FusePortal.Application.Common.DtoValidators;
 using FusePortal.Application.Common.Settings;
+using FusePortal.Application.Common.Validators;
 using Microsoft.Extensions.Options;
 
 namespace FusePortal.Application.Auth.RegisterUser
@@ -26,7 +26,7 @@ namespace FusePortal.Application.Auth.RegisterUser
                 .MaximumLength(config.NameMaxLength);
 
             RuleFor(x => x.Address)
-                .SetValidator(new AddressDtoValidator());
+                .SetValidator(new AddressValidator());
         }
     }
 }

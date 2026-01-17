@@ -8,9 +8,10 @@ using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Infrastructure.Messaging;
-using FusePortal.Application.Interfaces.Messaging;
 using FusePortal.Domain.Entities.UserAggregate;
 using FusePortal.Application.Common;
+using FusePortal.Domain.Entities.UniversityAggregate;
+using FusePortal.Application.Interfaces.EventDispatcher;
 
 namespace FusePortal.Infrastructure
 {
@@ -24,6 +25,10 @@ namespace FusePortal.Infrastructure
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite(configuration.GetConnectionString("AppDbContext")));
 
+            // settings
+            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.Configure<EncryptorSettings>(configuration.GetSection("EncryptorSettings"));
+
 
             // auth
             services.AddHttpContextAccessor();
@@ -32,13 +37,11 @@ namespace FusePortal.Infrastructure
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IEncryptor, Encryptor>();
 
-            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-            services.Configure<EncryptorSettings>(configuration.GetSection("EncryptorSettings"));
-
 
             // repo
             services.AddScoped<IUnitOfWork, EfUnitOfWork>();
             services.AddScoped<IUserRepo, UserRepo>();
+            services.AddScoped<IUniRepo, UniRepo>();
 
 
             // messaging

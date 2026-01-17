@@ -1,5 +1,6 @@
 using AutoFixture;
 using FusePortal.Application.Auth.RegisterUser;
+using FusePortal.Application.Common;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Users.Exceptions;
 using FusePortal.Domain.Entities.UserAggregate;
@@ -14,10 +15,9 @@ namespace ApplicationTests.AuthTests
     [TestFixture]
     public class RegisterUserCommandHandlerTests
     {
-        private readonly IUserRepo _repo;
-
         private IEncryptor _encryptor;
         private IJwtTokenGenerator _jwt;
+        private IUnitOfWork _uow;
 
         private readonly Fixture _fix = new();
 
@@ -37,7 +37,7 @@ namespace ApplicationTests.AuthTests
         };
 
         private RegisterUserCommandHandler CreateSut(IUserRepo repo)
-            => new(repo, _encryptor, _jwt);
+            => new(repo, _encryptor, _jwt, _uow);
 
 
         [OneTimeSetUp]
@@ -50,6 +50,11 @@ namespace ApplicationTests.AuthTests
 
             var generatorOptions = Options.Create(jwtSettings);
             _jwt = new JwtTokenGenerator(generatorOptions);
+
+            var uowMock = new Mock<IUnitOfWork>();
+            uowMock.Setup(x => x.CommitAsync(It.IsAny<CancellationToken>()))
+                   .Returns(Task.CompletedTask);
+            _uow = uowMock.Object;
         }
 
 
@@ -61,9 +66,9 @@ namespace ApplicationTests.AuthTests
             var mock = new Mock<IUserRepo>();
             mock.Setup(r => r.GetByEmailAsync(register.Email))
                 .ReturnsAsync(() => null);
-            var auth = CreateSut(mock.Object);
+            var sut = CreateSut(mock.Object);
 
-            var res = await auth.Handle(register, _fix.Create<CancellationToken>());
+            var res = await sut.Handle(register, default);
 
             Assert.That(res, Is.Not.Null);
             mock.Verify(r => r.GetByEmailAsync(register.Email), Times.Once());

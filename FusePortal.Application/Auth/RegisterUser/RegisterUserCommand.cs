@@ -1,4 +1,4 @@
-using FusePortal.Application.Common;
+using FusePortal.Domain.Common.ValueObjects.Address;
 using MediatR;
 
 namespace FusePortal.Application.Auth.RegisterUser
@@ -7,6 +7,6 @@ namespace FusePortal.Application.Auth.RegisterUser
             string Name,
             string Email,
             string Password,
-            AddressDto Address)
+            Address Address)
         : IRequest<AuthResponse>;
 }

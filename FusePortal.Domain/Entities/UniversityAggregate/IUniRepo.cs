@@ -1,11 +1,13 @@
+using FusePortal.Domain.SeedWork;
+
 namespace FusePortal.Domain.Entities.UniversityAggregate
 {
-    public interface IUniRepo
+    public interface IUniRepo : IRepository<University>
     {
-        Task<University?> GetByIdAsync(Guid id);
+        ValueTask<University?> GetByIdAsync(Guid id);
         Task<University?> GetByNameAsync(string name);
-        Task AddAsync(University university);
-        Task DeleteByIdAsync(Guid id);
+        Task AddAsync(University uni);
+        void Remove(University uni);
 
         Task<List<University>> GetPageAsync(Guid? lastId, int pageSize);
     }

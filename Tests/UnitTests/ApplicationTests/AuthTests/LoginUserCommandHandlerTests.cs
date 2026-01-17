@@ -1,8 +1,9 @@
 using AutoFixture;
 using FusePortal.Application.Auth.LoginUser;
+using FusePortal.Application.Common;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Users.Exceptions;
-using FusePortal.Domain.Common.ValueObjects;
+using FusePortal.Domain.Common.ValueObjects.Address;
 using FusePortal.Domain.Entities.UserAggregate;
 using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
@@ -14,10 +15,9 @@ namespace ApplicationTests.AuthTests
     [TestFixture]
     public class LoginUserCommandHandlerTests
     {
-        private readonly IUserRepo _repo;
-
         private IEncryptor _encryptor;
         private IJwtTokenGenerator _jwt;
+        private IUnitOfWork _uow;
 
         private readonly Fixture _fix = new();
 
@@ -47,10 +47,14 @@ namespace ApplicationTests.AuthTests
 
             var generatorOptions = Options.Create(jwtSettings);
             _jwt = new JwtTokenGenerator(generatorOptions);
+
+            var uowMock = new Mock<IUnitOfWork>();
+            uowMock.Setup(x => x.CommitAsync());
+            _uow = uowMock.Object;
         }
 
         private LoginUserCommandHandler CreateSut(IUserRepo repo)
-            => new(repo, _encryptor, _jwt);
+            => new(repo, _encryptor, _jwt, _uow);
 
         [Test]
         public async Task LoginAsync_Success()

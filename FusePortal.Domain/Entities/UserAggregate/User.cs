@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using FusePortal.Domain.Common.ValueObjects;
+using FusePortal.Domain.Common.ValueObjects.Address;
 using FusePortal.Domain.Entities.ChatAggregate;
 using FusePortal.Domain.Entities.FileEntityAggregate;
 using FusePortal.Domain.Entities.SubjectAggregate;
 using FusePortal.Domain.Entities.UniversityAggregate;
-using FusePortal.Domain.Entities.UserAggregate.UserDomainEvents;
+using FusePortal.Domain.Entities.UserAggregate.DomainEvents;
 using FusePortal.Domain.SeedWork;
 
 namespace FusePortal.Domain.Entities.UserAggregate;
@@ -26,16 +26,16 @@ public sealed class User : Entity, IAggregateRoot
     [Required]
     public Address Address { get; private set; }
 
-    private readonly List<University> _universities;
+    private readonly List<University> _universities = [];
     public IReadOnlyCollection<University> Universities => _universities.AsReadOnly();
 
-    private readonly List<FileEntity> _fileEntities;
+    private readonly List<FileEntity> _fileEntities = [];
     public IReadOnlyCollection<FileEntity> FileEntities => _fileEntities.AsReadOnly();
 
-    private readonly List<Subject> _subjects;
+    private readonly List<Subject> _subjects = [];
     public IReadOnlyCollection<Subject> Subjects => _subjects.AsReadOnly();
 
-    private readonly List<Chat> _chats;
+    private readonly List<Chat> _chats = [];
     public IReadOnlyCollection<Chat> Chats => _chats.AsReadOnly();
 
 
@@ -45,10 +45,10 @@ public sealed class User : Entity, IAggregateRoot
         string passwordHash,
         Address address)
     {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
-        Email = email ?? throw new ArgumentNullException(nameof(email));
-        PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
-        Address = address ?? throw new ArgumentNullException(nameof(address));
+        Name = name ?? throw new UserDomainException($"field can't be null or empty: {nameof(name)}");
+        Email = email ?? throw new UserDomainException($"field can't be null or empty: {nameof(email)}");
+        PasswordHash = passwordHash ?? throw new UserDomainException($"field can't be null or empty: {nameof(passwordHash)}");
+        Address = address ?? throw new UserDomainException($"field can't be null or empty: {nameof(address)}");
         Role = RoleType.Student;
 
         AddDomainEvent(new UserRegisteredEvent(Id, Name, Email));
@@ -82,11 +82,23 @@ public sealed class User : Entity, IAggregateRoot
             return;
 
         if (string.IsNullOrWhiteSpace(newEmail))
-            throw new ArgumentException(nameof(newEmail));
+            throw new UserDomainException($"field cant be null or empty: {nameof(newEmail)}");
 
         var oldEmail = Email;
         Email = newEmail;
         AddDomainEvent(new UserEmailChangedEvent(Id, oldEmail, newEmail));
+    }
+
+    public void UpdatePasswordHash(string newPasswordHash)
+    {
+        if (PasswordHash == newPasswordHash)
+            return;
+
+        if (string.IsNullOrWhiteSpace(newPasswordHash))
+            throw new UserDomainException($"field cant be null or empty: {nameof(newPasswordHash)}");
+
+        PasswordHash = newPasswordHash;
+        AddDomainEvent(new UserPasswordChangedEvent(Id));
     }
 
     public void AddUniversity(University uni)
@@ -101,7 +113,7 @@ public sealed class User : Entity, IAggregateRoot
     {
         if (!_universities.Contains(uni)) return;
 
-        _universities.Add(uni);
+        _universities.Remove(uni);
         AddDomainEvent(new UserRemovedUniversityEvent(Id, uni));
     }
 

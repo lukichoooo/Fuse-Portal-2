@@ -15,11 +15,13 @@ namespace FusePortal.Infrastructure.Repo
             => _context.Users.FindAsync(id);
 
 
-        public async Task<User?> GetUserDetailsByIdAsync(Guid id)
-            => await _context.Users.FindAsync(id); // add includes later
+        public async Task<User?> GetUserWithUnisByIdAsync(Guid id)
+            => await _context.Users
+                .Include(u => u.Universities)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
 
-        public async Task<List<User>> GetUsersPageAsync(Guid? lastId, int pageSize)
+        public async Task<List<User>> GetPageAsync(Guid? lastId, int pageSize)
         {
             IQueryable<User> query = _context.Users;
 
@@ -32,11 +34,8 @@ namespace FusePortal.Infrastructure.Repo
                 .ToListAsync();
         }
 
-        public async Task DeleteByIdAsync(Guid id)
-            => await _context.Users
-                .Where(u => u.Id == id)
-                .ExecuteDeleteAsync();
-
+        public void Remove(User user)
+            => _context.Users.Remove(user);
 
         public async Task AddAsync(User user)
             => await _context.Users.AddAsync(user);

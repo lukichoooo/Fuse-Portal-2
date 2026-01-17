@@ -8,10 +8,13 @@ namespace FusePortal.Infrastructure.Auth
     {
         private readonly IEncryptor _encryptor = encryptor;
 
+        public string HashPassword(string password)
+            => _encryptor.Encrypt(password);
+
         public void VerifyPassword(User user, string password)
         {
-            if (_encryptor.Decrypt(user.PasswordHash) == password)
-                throw new UserWrongCredentialsException("Wrong credemtoals");
+            if (_encryptor.Decrypt(user.PasswordHash) != password)
+                throw new UserWrongCredentialsException("Wrong Credentials");
         }
     }
 }

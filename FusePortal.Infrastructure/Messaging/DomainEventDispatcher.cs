@@ -1,4 +1,4 @@
-using FusePortal.Application.Interfaces.Messaging;
+using FusePortal.Application.Interfaces.EventDispatcher;
 using MediatR;
 
 namespace FusePortal.Infrastructure.Messaging
