@@ -39,7 +39,7 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Chat
 
         public async Task<MessageLLMDto> SendMessageStreamingAsync(
                 MessageLLMDto message,
-                Func<string, Task>? onStreamReceived,
+                Func<string, Task> onStreamReceived,
                 CancellationToken ct = default)
         {
             var chatId = message.ChatId;

@@ -1,28 +1,34 @@
 using FusePortal.Infrastructure.Services.LLM.Interfaces;
-using Microsoft.Extensions.Hosting;
 
 namespace FusePortal.Infrastructure.Services.LLM.Implementation
 {
-    public sealed class FilePromptProvider(IHostEnvironment env) : IPromptProvider
+
+    public sealed class FilePromptProvider : IPromptProvider
     {
-        // TODO: needs checking if works
-        private readonly string _basePath = Path.Combine(
-                env.ContentRootPath,
-                "Settings",
-                "LLM",
-                "Prompts"
-            );
+        private readonly string _chatPrompt;
+        private readonly string _parserPrompt;
+        private readonly string _examGeneratorPrompt;
+        private readonly string _examResultAnalyzerPrompt;
 
-        public string GetChatPrompt()
-            => File.ReadAllText(Path.Combine(_basePath, "chat.prompt.txt"));
+        public FilePromptProvider()
+        {
+            var basePath = Path.Combine(
+                    "..",
+                    "FusePortal.Infrastructure",
+                    "Settings",
+                    "LLM",
+                    "Prompts");
 
-        public string GetParserPrompt()
-            => File.ReadAllText(Path.Combine(_basePath, "parser.prompt.txt"));
+            _chatPrompt = File.ReadAllText(Path.Combine(basePath, "chat.prompt.txt"));
+            _parserPrompt = File.ReadAllText(Path.Combine(basePath, "parser.prompt.txt"));
+            _examGeneratorPrompt = File.ReadAllText(Path.Combine(basePath, "exam_generator.prompt.txt"));
+            _examResultAnalyzerPrompt = File.ReadAllText(Path.Combine(basePath, "exam_result_analyzer.prompt.txt"));
+        }
 
-        public string GetExamGeneratorPrompt()
-            => File.ReadAllText(Path.Combine(_basePath, "exam_generator.prompt.txt"));
-
-        public string GetExamResultAnalyzerPrompt()
-            => File.ReadAllText(Path.Combine(_basePath, "exam_result_analyzer.prompt.txt"));
+        public string GetChatPrompt() => _chatPrompt;
+        public string GetParserPrompt() => _parserPrompt;
+        public string GetExamGeneratorPrompt() => _examGeneratorPrompt;
+        public string GetExamResultAnalyzerPrompt() => _examResultAnalyzerPrompt;
     }
+
 }

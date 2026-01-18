@@ -23,7 +23,7 @@ public class University : Entity, IAggregateRoot
         Name = name ?? throw new UniversityDomainException($"field cant be null or empty: {nameof(name)}");
         Address = address ?? throw new UniversityDomainException($"field cant be null or empty: {nameof(address)}");
 
-        AddDomainEvent(new UniversityCreatedEvent(Id, Name, Address));
+        AddDomainEvent(new UniversityCreatedEvent(Id));
     }
 
     private University() { } // EF

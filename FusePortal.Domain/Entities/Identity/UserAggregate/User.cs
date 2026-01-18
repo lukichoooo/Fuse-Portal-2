@@ -51,7 +51,7 @@ public sealed class User : Entity, IAggregateRoot
         Address = address ?? throw new UserDomainException($"field can't be null or empty: {nameof(address)}");
         Role = RoleType.Student;
 
-        AddDomainEvent(new UserRegisteredEvent(Id, Name, Email));
+        AddDomainEvent(new UserRegisteredEvent(Id));
     }
 
 

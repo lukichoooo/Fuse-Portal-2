@@ -1,24 +1,16 @@
+using FusePortal.Domain.SeedWork;
 using MediatR;
 
 namespace FusePortal.Application.Common.SeedWork
 {
-    public abstract class BaseDomainEventHandler<TNotification> : INotificationHandler<TNotification>
-        where TNotification : INotification
+    public abstract class BaseDomainEventHandler<TNotification>
+        : INotificationHandler<TNotification> where TNotification : IDomainEvent
     {
-        private readonly IUnitOfWork _uow;
-
-        protected BaseDomainEventHandler(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
-
-        public async Task Handle(
+        public Task Handle(
                 TNotification evt,
                 CancellationToken ct)
-        {
-            await ExecuteAsync(evt, ct);
-            await _uow.CommitAsync(ct);
-        }
+            => ExecuteAsync(evt, ct);
+
 
         protected abstract Task ExecuteAsync(
                 TNotification evt,

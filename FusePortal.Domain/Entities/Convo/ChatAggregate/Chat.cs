@@ -26,7 +26,7 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
             UserId = userId;
             LastResponseId = null;
 
-            AddDomainEvent(new ChatCreatedEvent(Id, userId));
+            AddDomainEvent(new ChatCreatedEvent(Id));
         }
 
 

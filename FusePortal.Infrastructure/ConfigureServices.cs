@@ -99,14 +99,14 @@ namespace FusePortal.Infrastructure
 
             // messaging
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-            services.AddScoped<IIntergrationEventDispatcher, IntergrationEventDispatcher>();
+            services.AddScoped<IIntegrationEventDispatcher, IntegrationEventDispatcher>();
 
 
             // LLM
             services.AddScoped<IChatMetadataService, ChatMetadataService>();
             services.AddScoped<ILLMApiSettingsChooser, LLMApiSettingsChooser>();
             services.AddScoped<ILLMInputGenerator, LLMInputGenerator>();
-            services.AddScoped<IPromptProvider, FilePromptProvider>();
+            services.AddSingleton<IPromptProvider, FilePromptProvider>(); // -- singleton
             // lmStudioLLM
             services.AddScoped<ILLMMessageService, LMStudioMessageService>();
             services.AddScoped<ILLMApiResponseStreamer, LMStudioApiResponseStreamer>();

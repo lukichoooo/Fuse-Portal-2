@@ -2,10 +2,10 @@ using FusePortal.Application.Common.SeedWork;
 
 namespace FusePortal.Application.Interfaces.EventDispatcher
 {
-    public interface IIntergrationEventDispatcher
+    public interface IIntegrationEventDispatcher
     {
         Task DispatchAsync(
-                IEnumerable<IIntergrationEvent> events,
+                IIntegrationEvent events,
                 CancellationToken ct = default);
     }
 }

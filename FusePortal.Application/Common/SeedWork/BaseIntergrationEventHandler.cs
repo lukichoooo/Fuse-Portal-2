@@ -2,9 +2,9 @@ using MediatR;
 
 namespace FusePortal.Application.Common.SeedWork
 {
-    public abstract class BaseIntergrationEventHandler<TIntergrationEvent>
-        : INotificationHandler<TIntergrationEvent>
-        where TIntergrationEvent : IIntergrationEvent
+    public abstract class BaseIntergrationEventHandler<TIntegrationEvent>
+        : INotificationHandler<TIntegrationEvent>
+        where TIntegrationEvent : IIntegrationEvent
     {
         private readonly IUnitOfWork _uow;
 
@@ -14,7 +14,7 @@ namespace FusePortal.Application.Common.SeedWork
         }
 
         public async Task Handle(
-                TIntergrationEvent evt,
+                TIntegrationEvent evt,
                 CancellationToken ct)
         {
             await ExecuteAsync(evt, ct);
@@ -22,7 +22,7 @@ namespace FusePortal.Application.Common.SeedWork
         }
 
         protected abstract Task ExecuteAsync(
-                TIntergrationEvent evt,
+                TIntegrationEvent evt,
                 CancellationToken ct);
     }
 }

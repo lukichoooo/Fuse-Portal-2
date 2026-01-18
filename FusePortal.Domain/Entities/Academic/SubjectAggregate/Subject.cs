@@ -38,7 +38,7 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
             Grade = grade;
             Metadata = metadata;
 
-            AddDomainEvent(new SubjectCreatedEvent(Name, UserId));
+            AddDomainEvent(new SubjectCreatedEvent(Id, UserId));
         }
 
         public void AddSchedule(Schedule schedule)

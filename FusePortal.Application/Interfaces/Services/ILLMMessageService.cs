@@ -10,7 +10,7 @@ namespace FusePortal.Application.Interfaces.Services
 
         Task<MessageLLMDto> SendMessageStreamingAsync(
                 MessageLLMDto message,
-                Func<string, Task>? onStreamReceived,
+                Func<string, Task> onStreamReceived,
                 CancellationToken ct = default);
 
     }

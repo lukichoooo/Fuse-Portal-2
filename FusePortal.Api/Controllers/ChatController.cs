@@ -53,18 +53,18 @@ namespace FusePortal.Api.Controllers
         public async Task<IActionResult> SendMessage(
                 [FromBody] SendMessageCommand sendMessageCommand)
         {
-            await _sender.Send(sendMessageCommand);
+            await _sender.Send(sendMessageCommand with { Streaming = false });
             return Ok();
         }
 
-        //
-        // [HttpPost("ws/send")]
-        // public async Task<IActionResult> SendMessageStreaming(
-        //         [FromBody] SendMessageStreamingCommand sendMessageStreamingCommand)
-        // {
-        //     await _sender.Send(sendMessageStreamingCommand);
-        //     return Ok();
-        // }
+
+        [HttpPost("ws/send")]
+        public async Task<IActionResult> SendMessageStreaming(
+                [FromBody] SendMessageCommand sendMessageCommand)
+        {
+            await _sender.Send(sendMessageCommand with { Streaming = true });
+            return Ok();
+        }
 
     }
 }
