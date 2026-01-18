@@ -1,12 +1,12 @@
 using FusePortal.Api.Settings;
-using FusePortal.Application.Users;
-using FusePortal.Application.Users.Commands.AddUni;
-using FusePortal.Application.Users.Commands.Delete;
-using FusePortal.Application.Users.Commands.RemoveUni;
-using FusePortal.Application.Users.Commands.Update;
-using FusePortal.Application.Users.Queries.GetUserById;
-using FusePortal.Application.Users.Queries.GetUsersPage;
-using FusePortal.Application.Users.Queries.GetUserWithUnisById;
+using FusePortal.Application.UseCases.Identity.Users;
+using FusePortal.Application.UseCases.Identity.Users.Commands.AddUniToUser;
+using FusePortal.Application.UseCases.Identity.Users.Commands.Delete;
+using FusePortal.Application.UseCases.Identity.Users.Commands.RemoveUniFromUser;
+using FusePortal.Application.UseCases.Identity.Users.Commands.Update;
+using FusePortal.Application.UseCases.Identity.Users.Queries.GetUserById;
+using FusePortal.Application.UseCases.Identity.Users.Queries.GetUsersPage;
+using FusePortal.Application.UseCases.Identity.Users.Queries.GetUserWithUnisById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +42,8 @@ namespace FusePortal.Api.Controllers
                 [FromRoute] Guid id)
             => Ok(await _sender.Send(new GetUserWithUnisByIdQuery(id)));
 
+
+
         [HttpPut("unis/add/{uniId:guid}")]
         public async Task<IActionResult> AddUni(
                 [FromRoute] Guid uniId)
@@ -59,10 +61,13 @@ namespace FusePortal.Api.Controllers
         }
 
         [HttpPut("me")]
-        public async Task<ActionResult<UserDto>> UpdateCurrentUserCredentialsAsync(
+        public async Task<IActionResult> UpdateCurrentUserCredentialsAsync(
                 [FromBody] UpdateUserCommand updateUserCommand
                 )
-            => Ok(await _sender.Send(updateUserCommand));
+        {
+            await _sender.Send(updateUserCommand);
+            return Ok();
+        }
 
         [HttpDelete("me{id:guid}")]
         public async Task<IActionResult> DeleteCurrentUser(

@@ -1,8 +1,8 @@
 using FusePortal.Api.Settings;
-using FusePortal.Application.Unis;
-using FusePortal.Application.Unis.Commands.Create;
-using FusePortal.Application.Unis.Queries.GetUniById;
-using FusePortal.Application.Unis.Queries.GetUnisPage;
+using FusePortal.Application.UseCases.Academic.Unis;
+using FusePortal.Application.UseCases.Academic.Unis.Commands.Create;
+using FusePortal.Application.UseCases.Academic.Unis.Queries.GetUniById;
+using FusePortal.Application.UseCases.Academic.Unis.Queries.GetUnisPage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,10 +1,11 @@
 using AutoFixture;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Interfaces.EventDispatcher;
-using FusePortal.Application.Users.Commands.AddUniToUser;
-using FusePortal.Application.Users.Commands.RemoveUniFromUser;
-using FusePortal.Domain.Entities.UniversityAggregate;
-using FusePortal.Domain.Entities.UserAggregate;
+using FusePortal.Application.UseCases.Identity.Users.Commands.AddUniToUser;
+using FusePortal.Application.UseCases.Identity.Users.Commands.RemoveUniFromUser;
+using FusePortal.Domain.Entities.Academic.UniversityAggregate;
+using FusePortal.Domain.Entities.Identity.UserAggregate;
+using FusePortal.Domain.SeedWork;
 using FusePortal.Infrastructure.Data;
 using FusePortal.Infrastructure.Repo;
 using MediatR;
@@ -68,7 +69,7 @@ namespace IntergrationTests.UserTests
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
             dispatcher.Setup(d => d.DispatchAsync(
-                       It.IsAny<IEnumerable<INotification>>(),
+                       It.IsAny<IEnumerable<IDomainEvent>>(),
                        It.IsAny<CancellationToken>()));
 
             var uow = new EfUnitOfWork(_context, dispatcher.Object);
@@ -112,7 +113,7 @@ namespace IntergrationTests.UserTests
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
             dispatcher.Setup(d => d.DispatchAsync(
-                       It.IsAny<IEnumerable<INotification>>(),
+                       It.IsAny<IEnumerable<IDomainEvent>>(),
                        It.IsAny<CancellationToken>()));
 
             var uow = new EfUnitOfWork(_context, dispatcher.Object);
@@ -158,7 +159,7 @@ namespace IntergrationTests.UserTests
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
             dispatcher.Setup(d => d.DispatchAsync(
-                       It.IsAny<IEnumerable<INotification>>(),
+                       It.IsAny<IEnumerable<IDomainEvent>>(),
                        It.IsAny<CancellationToken>()));
 
             var uow = new EfUnitOfWork(_context, dispatcher.Object);
@@ -199,7 +200,7 @@ namespace IntergrationTests.UserTests
 
             var dispatcher = new Mock<IDomainEventDispatcher>();
             dispatcher.Setup(d => d.DispatchAsync(
-                       It.IsAny<IEnumerable<INotification>>(),
+                       It.IsAny<IEnumerable<IDomainEvent>>(),
                        It.IsAny<CancellationToken>()));
 
             var uow = new EfUnitOfWork(_context, dispatcher.Object);

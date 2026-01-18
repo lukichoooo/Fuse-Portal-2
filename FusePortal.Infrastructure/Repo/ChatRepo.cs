@@ -1,4 +1,4 @@
-using FusePortal.Domain.Entities.ChatAggregate;
+using FusePortal.Domain.Entities.Convo.ChatAggregate;
 using FusePortal.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,23 +42,35 @@ namespace FusePortal.Infrastructure.Repo
                 int pageSize,
                 Guid userId)
         {
-            if (firstMsgId is null)
+            var chat = await _context.Chats
+                .FirstOrDefaultAsync(c => c.Id == chatId && c.UserId == userId);
+
+            if (chat is null)
+                return null;
+
+            if (firstMsgId is not null)
             {
-                return await _context.Chats.Include(c => c.Messages
-                                    .OrderByDescending(m => m.Id)
-                                    .Take(pageSize)
-                                    .OrderByDescending(m => m.CreatedAt))
-                    .ThenInclude(m => m.Files)
-                    .FirstOrDefaultAsync();
+                await context.Entry(chat)
+                    .Collection(c => c.Messages)
+                    .Query()
+                    .OrderByDescending(m => m.CreatedAt)
+                    .Where(m => m.Id > firstMsgId)
+                    .Take(pageSize)
+                    .Reverse()
+                    .LoadAsync();
+            }
+            else
+            {
+                await context.Entry(chat)
+                    .Collection(c => c.Messages)
+                    .Query()
+                    .OrderByDescending(m => m.CreatedAt)
+                    .Take(pageSize)
+                    .Reverse()
+                    .LoadAsync();
             }
 
-            return await _context.Chats.Include(c => c.Messages
-                           .Where(m => m.Id > firstMsgId)
-                                .OrderByDescending(m => m.Id)
-                                .Take(pageSize)
-                                .OrderByDescending(m => m.CreatedAt))
-                           .ThenInclude(m => m.Files)
-                           .FirstOrDefaultAsync();
+            return chat;
         }
     }
 }

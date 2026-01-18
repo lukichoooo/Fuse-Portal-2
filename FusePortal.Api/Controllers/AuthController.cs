@@ -1,6 +1,6 @@
-using FusePortal.Application.Auth;
-using FusePortal.Application.Auth.LoginUser;
-using FusePortal.Application.Auth.RegisterUser;
+using FusePortal.Application.UseCases.Identity.Auth;
+using FusePortal.Application.UseCases.Identity.Auth.LoginUser;
+using FusePortal.Application.UseCases.Identity.Auth.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,0 +1,25 @@
+namespace FusePortal.Application.UseCases.Identity.Users.Exceptions
+{
+
+    public class UserWrongCredentialsException : Exception
+    {
+        public UserWrongCredentialsException(string message) : base(message) { }
+        public UserWrongCredentialsException() { }
+        public UserWrongCredentialsException(string? message, Exception? innerException) : base(message, innerException) { }
+    }
+
+    public class UserNotFoundException : Exception
+    {
+        public UserNotFoundException(string message) : base(message) { }
+        public UserNotFoundException() { }
+        public UserNotFoundException(string? message, Exception? innerException) : base(message, innerException) { }
+    }
+
+    public class UserAlreadyExistsException : Exception
+    {
+        public UserAlreadyExistsException(string message) : base(message) { }
+        public UserAlreadyExistsException() { }
+        public UserAlreadyExistsException(string? message, Exception? innerException) : base(message, innerException) { }
+    }
+
+}

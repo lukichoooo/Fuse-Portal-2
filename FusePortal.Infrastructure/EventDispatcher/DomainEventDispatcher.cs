@@ -1,4 +1,5 @@
 using FusePortal.Application.Interfaces.EventDispatcher;
+using FusePortal.Domain.SeedWork;
 using MediatR;
 
 namespace FusePortal.Infrastructure.EventDispatcher
@@ -8,7 +9,7 @@ namespace FusePortal.Infrastructure.EventDispatcher
         private readonly IMediator _mediator = mediator;
 
         public async Task DispatchAsync(
-                IEnumerable<INotification> events,
+                IEnumerable<IDomainEvent> events,
                 CancellationToken cancellationToken = default)
         {
             foreach (var e in events)

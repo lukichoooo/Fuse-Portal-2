@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using MediatR;
 
 namespace FusePortal.Domain.SeedWork;
 
@@ -8,11 +7,11 @@ public abstract class Entity
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid Id { get; protected set; }
 
-    private readonly List<INotification> _domainEvents = [];
-    public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
+    private readonly List<IDomainEvent> _domainEvents = [];
+    public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);
-    public void RemoveDomainEvent(INotification eventItem) => _domainEvents.Remove(eventItem);
+    public void AddDomainEvent(IDomainEvent eventItem) => _domainEvents.Add(eventItem);
+    public void RemoveDomainEvent(IDomainEvent eventItem) => _domainEvents.Remove(eventItem);
     public void ClearDomainEvents() => _domainEvents.Clear();
 
     public bool IsTransient() => Id == default;

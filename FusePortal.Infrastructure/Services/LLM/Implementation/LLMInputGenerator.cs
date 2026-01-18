@@ -1,0 +1,62 @@
+using System.Text;
+using FusePortal.Application.UseCases.Convo.Chats;
+using FusePortal.Infrastructure.Services.LLM.Interfaces;
+using FusePortal.Infrastructure.Settings.LLM;
+using Microsoft.Extensions.Options;
+
+namespace FusePortal.Infrastructure.Services.LLM.Implementation
+{
+    public class LLMInputGenerator(IOptions<LLMInputSettings> options) : ILLMInputGenerator
+    {
+        private readonly LLMInputSettings _settings = options.Value;
+
+        public string GenerateInput(MessageLLMDto msg, string? rules)
+        {
+
+            var sb = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(rules))
+                sb.AppendLine($"{_settings.RulesPromptDelimiter}\n{rules}");
+
+            if (!string.IsNullOrWhiteSpace(msg.Text))
+                sb.AppendLine($"{_settings.UserInputDelimiter}\n{msg.Text}");
+
+            foreach (var (fileName, content) in msg.Files ?? [])
+            {
+                sb.AppendLine($"{_settings.FileNameDelimiter}\n{fileName}");
+                sb.AppendLine($"{_settings.FileContentDelimiter}\n{content}");
+            }
+
+            return sb.ToString().Trim();
+        }
+
+        public string GenerateInput(string text, string? rules)
+        {
+            var sb = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(rules))
+                sb.AppendLine($"{_settings.RulesPromptDelimiter}\n{rules}");
+
+            if (!string.IsNullOrWhiteSpace(text))
+                sb.AppendLine($"{_settings.FileContentDelimiter}\n{text}");
+
+            return sb.ToString();
+        }
+
+        // public string GenerateInput(ExamDto examDto, string? rules)
+        // {
+        //     var sb = new StringBuilder();
+        //
+        //     if (!string.IsNullOrWhiteSpace(rules))
+        //         sb.AppendLine($"{_settings.RulesPromptDelimiter}\n{rules}");
+        //
+        //     if (!string.IsNullOrWhiteSpace(examDto.Questions))
+        //         sb.AppendLine($"-----QUESTIONS-----\n{examDto.Questions}");
+        //
+        //     if (!string.IsNullOrWhiteSpace(examDto.Questions))
+        //         sb.AppendLine($"-----ANSWERS-----\n{examDto.Answers}");
+        //
+        //     return sb.ToString();
+        // }
+    }
+}

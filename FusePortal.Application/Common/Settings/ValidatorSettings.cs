@@ -2,23 +2,26 @@ namespace FusePortal.Application.Common.Settings
 {
     public class ValidatorSettings
     {
+        public int PageSizeMax { get; init; }
+
         // atuh
-        public int PasswordMinLength { get; set; }
-        public int PasswordMaxLength { get; set; }
-        public int NameMinLength { get; set; }
-        public int NameMaxLength { get; set; }
+        public int PasswordMinLength { get; init; }
+        public int PasswordMaxLength { get; init; }
+        public int NameMinLength { get; init; }
+        public int NameMaxLength { get; init; }
 
         // address
-        public int CityMinLength { get; set; }
-        public int CityMaxLength { get; set; }
+        public int CityMinLength { get; init; }
+        public int CityMaxLength { get; init; }
 
         // university
-        public int UniNameMaxLength { get; set; }
-        public int UniNameMinLength { get; set; }
+        public int UniNameMaxLength { get; init; }
+        public int UniNameMinLength { get; init; }
 
         // chat
-        public int ChatNameMaxLength { get; set; }
+        public int ChatNameMaxLength { get; init; }
 
-        public int MessageMaxLength { get; set; }
+        public int MessageMaxLength { get; init; }
+        public int MaxFilesPerMessage { get; init; }
     }
 }

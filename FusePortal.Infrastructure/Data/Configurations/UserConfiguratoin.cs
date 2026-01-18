@@ -1,4 +1,4 @@
-using FusePortal.Domain.Entities.UserAggregate;
+using FusePortal.Domain.Entities.Identity.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

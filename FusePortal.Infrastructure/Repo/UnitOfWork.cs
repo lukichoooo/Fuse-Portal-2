@@ -7,10 +7,13 @@ namespace FusePortal.Infrastructure.Repo
 {
     public sealed class EfUnitOfWork(
         AppDbContext context,
-        IDomainEventDispatcher dispatcher) : IUnitOfWork
+        IDomainEventDispatcher domainDispatcher) : IUnitOfWork
     {
         private readonly AppDbContext _context = context;
-        private readonly IDomainEventDispatcher _dispatcher = dispatcher;
+        private readonly IDomainEventDispatcher _domainDispatcher = domainDispatcher;
+
+        // TODO: probs should be somewhere else
+        // private readonly IIntergrationEventDispatcher _integrationDispatcher = intergrationDispatcher;
 
         public async Task CommitAsync(CancellationToken ct = default)
         {
@@ -24,7 +27,7 @@ namespace FusePortal.Infrastructure.Repo
 
             foreach (var entity in entities)
             {
-                await _dispatcher.DispatchAsync(entity.DomainEvents, ct);
+                await _domainDispatcher.DispatchAsync(entity.DomainEvents, ct);
                 entity.ClearDomainEvents();
             }
         }

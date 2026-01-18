@@ -1,8 +1,8 @@
 using AutoFixture;
-using FusePortal.Application.Unis.Queries.GetUnisPage;
-using FusePortal.Application.Users.Queries.GetUsersPage;
-using FusePortal.Domain.Entities.UniversityAggregate;
-using FusePortal.Domain.Entities.UserAggregate;
+using FusePortal.Application.UseCases.Academic.Unis.Queries.GetUnisPage;
+using FusePortal.Application.UseCases.Identity.Users.Queries.GetUsersPage;
+using FusePortal.Domain.Entities.Academic.UniversityAggregate;
+using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Infrastructure.Data;
 using FusePortal.Infrastructure.Repo;
 using Microsoft.EntityFrameworkCore;

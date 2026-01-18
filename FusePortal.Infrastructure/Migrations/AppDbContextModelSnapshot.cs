@@ -17,82 +17,36 @@ namespace FusePortal.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.2");
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.ChatAggregate.Chat", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.ExamAggregate.Exam", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("LastResponseId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Answers")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("Questions")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Chats");
-                });
-
-            modelBuilder.Entity("FusePortal.Domain.Entities.ChatAggregate.Message", b =>
-                {
-                    b.Property<Guid>("Id")
+                    b.Property<string>("Results")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("FromUser")
+                    b.Property<int?>("ScoreFrom100")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
+                    b.Property<Guid>("SubjectId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("SubjectId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Exams");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.FileEntityAggregate.FileEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("MessageId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MessageId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("FileEntities");
-                });
-
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Lecturer", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Lecturer", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
@@ -101,20 +55,17 @@ namespace FusePortal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("SubjectId1")
+                    b.Property<Guid>("SubjectId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectId1");
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Lecturer");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Schedule", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Schedule", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
@@ -131,20 +82,17 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Property<DateTime>("Start")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("SubjectId1")
+                    b.Property<Guid>("SubjectId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SubjectId1");
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Schedule");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Subject", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Subject", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
@@ -166,10 +114,10 @@ namespace FusePortal.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Exams");
+                    b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Syllabus", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Syllabus", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
@@ -195,14 +143,13 @@ namespace FusePortal.Infrastructure.Migrations
                     b.ToTable("Syllabus");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.UniversityAggregate.University", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.UniversityAggregate.University", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -210,24 +157,96 @@ namespace FusePortal.Infrastructure.Migrations
                     b.ToTable("Universities");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.UserAggregate.User", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Content.FileEntityAggregate.FileEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("MessageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Chat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastResponseId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ChatId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("FromUser")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Identity.UserAggregate.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Role")
@@ -253,66 +272,42 @@ namespace FusePortal.Infrastructure.Migrations
                     b.ToTable("UniversityUser");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.ChatAggregate.Chat", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.ExamAggregate.Exam", b =>
                 {
-                    b.HasOne("FusePortal.Domain.Entities.UserAggregate.User", "User")
-                        .WithMany("Chats")
-                        .HasForeignKey("UserId")
+                    b.HasOne("FusePortal.Domain.Entities.Academic.SubjectAggregate.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.ChatAggregate.Message", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Lecturer", b =>
                 {
-                    b.HasOne("FusePortal.Domain.Entities.ChatAggregate.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-                });
-
-            modelBuilder.Entity("FusePortal.Domain.Entities.FileEntityAggregate.FileEntity", b =>
-                {
-                    b.HasOne("FusePortal.Domain.Entities.ChatAggregate.Message", "Message")
-                        .WithMany("Files")
-                        .HasForeignKey("MessageId");
-
-                    b.HasOne("FusePortal.Domain.Entities.UserAggregate.User", "User")
-                        .WithMany("FileEntities")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Message");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Lecturer", b =>
-                {
-                    b.HasOne("FusePortal.Domain.Entities.SubjectAggregate.Subject", "Subject")
+                    b.HasOne("FusePortal.Domain.Entities.Academic.SubjectAggregate.Subject", "Subject")
                         .WithMany("Lecturers")
-                        .HasForeignKey("SubjectId1");
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Schedule", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Schedule", b =>
                 {
-                    b.HasOne("FusePortal.Domain.Entities.SubjectAggregate.Subject", "Subject")
+                    b.HasOne("FusePortal.Domain.Entities.Academic.SubjectAggregate.Subject", "Subject")
                         .WithMany("Schedules")
-                        .HasForeignKey("SubjectId1");
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Subject", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Subject", b =>
                 {
-                    b.HasOne("FusePortal.Domain.Entities.UserAggregate.User", "User")
+                    b.HasOne("FusePortal.Domain.Entities.Identity.UserAggregate.User", "User")
                         .WithMany("Subjects")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -321,9 +316,9 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Syllabus", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Syllabus", b =>
                 {
-                    b.HasOne("FusePortal.Domain.Entities.SubjectAggregate.Subject", "Subject")
+                    b.HasOne("FusePortal.Domain.Entities.Academic.SubjectAggregate.Subject", "Subject")
                         .WithMany("Syllabuses")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -332,21 +327,11 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.UniversityAggregate.University", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.UniversityAggregate.University", b =>
                 {
-                    b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address", "Address", b1 =>
+                    b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("UniversityId")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(100)
                                 .HasColumnType("TEXT");
 
                             b1.HasKey("UniversityId");
@@ -361,21 +346,50 @@ namespace FusePortal.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.UserAggregate.User", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Content.FileEntityAggregate.FileEntity", b =>
                 {
-                    b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address", "Address", b1 =>
+                    b.HasOne("FusePortal.Domain.Entities.Convo.ChatAggregate.Message", "Message")
+                        .WithMany("Files")
+                        .HasForeignKey("MessageId");
+
+                    b.HasOne("FusePortal.Domain.Entities.Identity.UserAggregate.User", "User")
+                        .WithMany("FileEntities")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Message");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Chat", b =>
+                {
+                    b.HasOne("FusePortal.Domain.Entities.Identity.UserAggregate.User", "User")
+                        .WithMany("Chats")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Message", b =>
+                {
+                    b.HasOne("FusePortal.Domain.Entities.Convo.ChatAggregate.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Identity.UserAggregate.User", b =>
+                {
+                    b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(100)
                                 .HasColumnType("TEXT");
 
                             b1.HasKey("UserId");
@@ -392,30 +406,20 @@ namespace FusePortal.Infrastructure.Migrations
 
             modelBuilder.Entity("UniversityUser", b =>
                 {
-                    b.HasOne("FusePortal.Domain.Entities.UserAggregate.User", null)
+                    b.HasOne("FusePortal.Domain.Entities.Identity.UserAggregate.User", null)
                         .WithMany()
                         .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FusePortal.Domain.Entities.UniversityAggregate.University", null)
+                    b.HasOne("FusePortal.Domain.Entities.Academic.UniversityAggregate.University", null)
                         .WithMany()
                         .HasForeignKey("UniversitiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.ChatAggregate.Chat", b =>
-                {
-                    b.Navigation("Messages");
-                });
-
-            modelBuilder.Entity("FusePortal.Domain.Entities.ChatAggregate.Message", b =>
-                {
-                    b.Navigation("Files");
-                });
-
-            modelBuilder.Entity("FusePortal.Domain.Entities.SubjectAggregate.Subject", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Academic.SubjectAggregate.Subject", b =>
                 {
                     b.Navigation("Lecturers");
 
@@ -424,7 +428,17 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Navigation("Syllabuses");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.UserAggregate.User", b =>
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Chat", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Message", b =>
+                {
+                    b.Navigation("Files");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Identity.UserAggregate.User", b =>
                 {
                     b.Navigation("Chats");
 

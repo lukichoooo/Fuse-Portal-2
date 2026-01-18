@@ -1,10 +1,10 @@
 using AutoFixture;
-using FusePortal.Application.Auth.LoginUser;
 using FusePortal.Application.Common;
 using FusePortal.Application.Interfaces.Auth;
-using FusePortal.Application.Users.Exceptions;
+using FusePortal.Application.UseCases.Identity.Auth.LoginUser;
+using FusePortal.Application.UseCases.Identity.Users.Exceptions;
 using FusePortal.Domain.Common.ValueObjects.Address;
-using FusePortal.Domain.Entities.UserAggregate;
+using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;

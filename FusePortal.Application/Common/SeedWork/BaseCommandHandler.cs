@@ -13,17 +13,17 @@ namespace FusePortal.Application.Common.SeedWork
         }
 
         public async Task<TResult> Handle(
-                TCommand request,
-                CancellationToken cancellationToken)
+                TCommand command,
+                CancellationToken ct)
         {
-            var result = await ExecuteAsync(request, cancellationToken);
-            await _uow.CommitAsync(cancellationToken);
+            var result = await ExecuteAsync(command, ct);
+            await _uow.CommitAsync(ct);
             return result;
         }
 
         protected abstract Task<TResult> ExecuteAsync(
-                TCommand request,
-                CancellationToken cancellationToken);
+                TCommand command,
+                CancellationToken ct);
     }
 
     // Non Retruning Version
@@ -38,16 +38,16 @@ namespace FusePortal.Application.Common.SeedWork
         }
 
         public async Task Handle(
-                TCommand request,
-                CancellationToken cancellationToken)
+                TCommand command,
+                CancellationToken ct)
         {
-            await ExecuteAsync(request, cancellationToken);
-            await _uow.CommitAsync(cancellationToken);
+            await ExecuteAsync(command, ct);
+            await _uow.CommitAsync(ct);
         }
 
         protected abstract Task ExecuteAsync(
-                TCommand request,
-                CancellationToken cancellationToken);
+                TCommand command,
+                CancellationToken ct);
     }
 
 

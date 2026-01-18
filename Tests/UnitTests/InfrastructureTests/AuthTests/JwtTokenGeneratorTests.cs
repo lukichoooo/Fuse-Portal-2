@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoFixture;
 using FusePortal.Application.Interfaces.Auth;
-using FusePortal.Domain.Entities.UserAggregate;
+using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Infrastructure.Auth;
 using FusePortal.Infrastructure.Settings.Auth;
 using Microsoft.Extensions.Options;
