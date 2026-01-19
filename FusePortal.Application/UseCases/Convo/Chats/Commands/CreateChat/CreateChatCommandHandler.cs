@@ -8,20 +8,20 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.CreateChat
     public class CreateChatCommandHandler : BaseCommandHandler<CreateChatCommand>
     {
         private readonly IChatRepo _repo;
-        private readonly IIdentityProvider _currentContext;
+        private readonly IIdentityProvider _identity;
 
         public CreateChatCommandHandler(
                 IChatRepo repo,
-                IIdentityProvider currentContext,
+                IIdentityProvider identity,
                 IUnitOfWork uow) : base(uow)
         {
             _repo = repo;
-            _currentContext = currentContext;
+            _identity = identity;
         }
 
         protected override async Task ExecuteAsync(CreateChatCommand request, CancellationToken cancellationToken)
         {
-            var userId = _currentContext.GetCurrentUserId();
+            var userId = _identity.GetCurrentUserId();
             var chat = new Chat(request.Name, userId);
             await _repo.AddAsync(chat);
         }

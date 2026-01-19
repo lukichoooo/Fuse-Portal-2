@@ -3,6 +3,9 @@ using MediatR;
 
 namespace FusePortal.Application.Common.SeedWork
 {
+    /// <summary>
+    /// Does Not Save Changes to Database Automatically
+    /// </summary>
     public abstract class BaseDomainEventHandler<TNotification>
         : INotificationHandler<TNotification> where TNotification : IDomainEvent
     {

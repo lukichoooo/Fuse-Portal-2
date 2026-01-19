@@ -2,6 +2,9 @@ using MediatR;
 
 namespace FusePortal.Application.Common.SeedWork
 {
+    /// <summary>
+    /// Saves Changes to Database Automatically
+    /// </summary>
     public abstract class BaseIntergrationEventHandler<TIntegrationEvent>
         : INotificationHandler<TIntegrationEvent>
         where TIntegrationEvent : IIntegrationEvent

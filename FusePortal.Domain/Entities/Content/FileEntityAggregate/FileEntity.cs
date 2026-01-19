@@ -20,6 +20,7 @@ namespace FusePortal.Domain.Entities.Content.FileEntityAggregate
         public Guid? MessageId { get; private set; }
         public Message? Message { get; private set; }
 
+
         public FileEntity(
                 string name,
                 string text,

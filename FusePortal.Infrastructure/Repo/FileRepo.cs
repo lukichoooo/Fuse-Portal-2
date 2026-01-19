@@ -1,22 +1,17 @@
 using FusePortal.Domain.Entities.Content.FileEntityAggregate;
+using FusePortal.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace FusePortal.Infrastructure.Repo
 {
-    public class FileRepo : IFileRepo
+    public class FileRepo(AppDbContext context) : IFileRepo
     {
-        public Task AddFilesAsync(List<FileEntity> files)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly AppDbContext _context = context;
 
-        public ValueTask<FileEntity?> GetFileByIdAsync(Guid fileId, Guid userId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task AddAsync(FileEntity fileE)
+            => await _context.AddAsync(fileE);
 
-        public Task<FileEntity> RemoveFileByIdAsync(Guid fileId, Guid userId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<FileEntity?> GetById(Guid id, Guid UserId)
+            => await _context.Files.FirstOrDefaultAsync(f => f.Id == id && f.UserId == UserId);
     }
 }

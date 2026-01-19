@@ -40,18 +40,17 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
                 ?? throw new ChatNotFoundException($"Chat Not Found With Id={command.ChatId}");
 
             var message = new Message(command.MessageText, fromUser: true, chat.Id);
+            chat.SendMessage(message);
 
             if (command.FileIds != null)
             {
                 foreach (var fileId in command.FileIds)
                 {
-                    var fileE = await _fileRepo.GetFileByIdAsync(fileId, userId)
+                    var fileE = await _fileRepo.GetById(fileId, userId)
                         ?? throw new FileNotFoundException($"File Not Found With Id={fileId}");
                     chat.AttachFileToMessage(message.Id, fileE);
                 }
             }
-
-            chat.SendMessage(message);
 
             MessageLLMDto llmMessage = message.ToFacet<Message, MessageLLMDto>();
 

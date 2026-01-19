@@ -14,13 +14,13 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
         private readonly JsonSerializerOptions _serializerOptions;
         private readonly ILogger<LMStudioApi> _logger;
         private readonly HttpClient _httpClient;
-        private readonly ILLMApiResponseStreamer _responseStreamer;
+        private readonly ILLMApiResponseStreamReader _responseStreamer;
 
         public LMStudioApi(
                 ILogger<LMStudioApi> logger,
                 JsonSerializerOptions serializerOptions,
                 HttpClient httpClient,
-                ILLMApiResponseStreamer responseStreamer
+                ILLMApiResponseStreamReader responseStreamer
                 )
         {
             _logger = logger;

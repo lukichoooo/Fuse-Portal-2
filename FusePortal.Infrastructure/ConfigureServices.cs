@@ -25,6 +25,11 @@ using FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Chat;
 using FusePortal.Infrastructure.Services.SignalR;
 using System.Text.Json;
 using FusePortal.Infrastructure.Data.Cache;
+using FusePortal.Infrastructure.Services.FileProcessor.Implementatoin;
+using FusePortal.Infrastructure.Services.FileProcessor.Interfaces;
+using FusePortal.Application.UseCases.Content.Files;
+using FusePortal.Infrastructure.Services.FileProcessor;
+using FusePortal.Infrastructure.Settings.File;
 
 namespace FusePortal.Infrastructure
 {
@@ -78,7 +83,9 @@ namespace FusePortal.Infrastructure
             services.Configure<LLMInputSettings>(configuration.GetSection("LLMInputSettings"));
             // redisSettings
             services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
-
+            // fileSettings
+            services.Configure<FileProcessingSettings>(configuration.GetSection("FileProcessingSettings"));
+            services.Configure<TesseractSettings>(configuration.GetSection("TesseractSettings"));
 
 
             // auth
@@ -109,10 +116,16 @@ namespace FusePortal.Infrastructure
             services.AddSingleton<IPromptProvider, FilePromptProvider>(); // -- singleton
             // lmStudioLLM
             services.AddScoped<ILLMMessageService, LMStudioMessageService>();
-            services.AddScoped<ILLMApiResponseStreamer, LMStudioApiResponseStreamer>();
+            services.AddScoped<ILLMApiResponseStreamReader, LMStudioApiResponseStreamer>();
             services.AddScoped<ILMStudioApi, LMStudioApi>();
             services.AddScoped<ILMStudioMapper, LMStudioMapper>();
 
+            // File
+            services.AddScoped<IFileParser, FileParser>();
+            services.AddScoped<IFileProcessor, FileProcessingService>();
+
+            // Ocr
+            services.AddSingleton<IOcrService, PaddleOcrService>(); // -- singleton
 
             // Http Clients
             services.AddHttpClient<LMStudioApi>();

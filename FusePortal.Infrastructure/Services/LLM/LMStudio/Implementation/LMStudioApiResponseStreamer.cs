@@ -8,7 +8,7 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
     public class LMStudioApiResponseStreamer(
             JsonSerializerOptions serializerOptions,
             ILogger<LMStudioApiResponseStreamer> logger
-            ) : ILLMApiResponseStreamer
+            ) : ILLMApiResponseStreamReader
     {
 
         private readonly JsonSerializerOptions _serializerOptions = serializerOptions;

@@ -8,6 +8,7 @@ namespace FusePortal.Application.UseCases.Convo.Chats
             Include =
             [
                 nameof(Message.Id),
+                nameof(Message.CountNumber),
                 nameof(Message.Text),
                 nameof(Message.ChatId),
                 nameof(Message.CreatedAt),

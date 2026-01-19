@@ -3,7 +3,7 @@ using FusePortal.Application.UseCases.Convo.Chats;
 using FusePortal.Application.UseCases.Convo.Chats.Commands.CreateChat;
 using FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage;
 using FusePortal.Application.UseCases.Convo.Chats.Queries.GetChatsPage;
-using FusePortal.Application.UseCases.Convo.Chats.Queries.GetChatWithMessagesPage;
+using FusePortal.Application.UseCases.Convo.Chats.Queries.GetMessagesPage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,14 +30,14 @@ namespace FusePortal.Api.Controllers
                         lastId,
                         pageSize ?? _settings.DefaultPageSize)));
 
-        [HttpGet("{chatId:guid}")]
-        public async Task<ActionResult<List<ChatDto>>> GetChatWithMessages(
+        [HttpGet("messages/{chatId:guid}")]
+        public async Task<ActionResult<List<MessageDto>>> GetMessages(
                     [FromRoute] Guid chatId,
-                    [FromQuery] Guid? firstMsgId,
+                    [FromQuery] int? topMsgCountNumber,
                     [FromQuery] int? pageSize)
-            => Ok(await _sender.Send(new GetChatWithMessagesQuery(
+            => Ok(await _sender.Send(new GetMessagesPageQuery(
                             chatId,
-                        firstMsgId,
+                        topMsgCountNumber,
                         pageSize ?? _settings.BigPageSize)));
 
 

@@ -8,9 +8,9 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
 
         ValueTask<Chat?> GetChatByIdAsync(Guid chatId, Guid userId);
 
-        Task<Chat?> GetChatWithMessagesPageAsync(
+        Task<List<Message>> GetMessagesPageAsync(
                 Guid chatId,
-                Guid? firstMsgId,
+                int? topMsgCountNumber,
                 int pageSize,
                 Guid userId);
 

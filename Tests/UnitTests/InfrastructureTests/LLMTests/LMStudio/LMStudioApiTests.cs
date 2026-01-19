@@ -44,10 +44,10 @@ namespace InfrastructureTests.LLMTests.LMStudio
         }
 
         private LMStudioApi CreateSut(
-                ILLMApiResponseStreamer? responseStreamer = null)
+                ILLMApiResponseStreamReader? responseStreamer = null)
         {
             var httpClient = new HttpClient(_httpMessageHandlerMock.Object);
-            responseStreamer ??= new Mock<ILLMApiResponseStreamer>().Object;
+            responseStreamer ??= new Mock<ILLMApiResponseStreamReader>().Object;
 
             return new(
                 _loggerMock.Object,
@@ -182,7 +182,7 @@ namespace InfrastructureTests.LLMTests.LMStudio
                 onRecievedCalled = true;
                 return Task.CompletedTask;
             };
-            var streamerMock = new Mock<ILLMApiResponseStreamer>();
+            var streamerMock = new Mock<ILLMApiResponseStreamReader>();
             streamerMock.Setup(s => s.ReadResponseAsStreamAsync(
                         It.IsAny<HttpResponseMessage>(),
                         onRecieved
@@ -243,7 +243,7 @@ namespace InfrastructureTests.LLMTests.LMStudio
                 return Task.CompletedTask;
             };
 
-            var streamerMock = new Mock<ILLMApiResponseStreamer>();
+            var streamerMock = new Mock<ILLMApiResponseStreamReader>();
             streamerMock.Setup(s => s.ReadResponseAsStreamAsync(
                         It.IsAny<HttpResponseMessage>(),
                         onRecieved

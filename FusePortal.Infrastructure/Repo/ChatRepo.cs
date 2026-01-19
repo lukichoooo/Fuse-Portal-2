@@ -36,41 +36,27 @@ namespace FusePortal.Infrastructure.Repo
             => await _context.Chats
                 .FirstOrDefaultAsync(c => c.Id == chatId && c.UserId == userId);
 
-        public async Task<Chat?> GetChatWithMessagesPageAsync(
+        public async Task<List<Message>> GetMessagesPageAsync(
                 Guid chatId,
-                Guid? firstMsgId,
+                int? topConutNumber,
                 int pageSize,
                 Guid userId)
         {
-            var chat = await _context.Chats
-                .FirstOrDefaultAsync(c => c.Id == chatId && c.UserId == userId);
+            IQueryable<Message> messageQuery = _context.Messages
+                .Where(m => m.ChatId == chatId);
 
-            if (chat is null)
-                return null;
+            if (topConutNumber is not null)
+                messageQuery = messageQuery.Where(m => m.CountNumber < topConutNumber);
 
-            if (firstMsgId is not null)
-            {
-                await context.Entry(chat)
-                    .Collection(c => c.Messages)
-                    .Query()
-                    .OrderByDescending(m => m.CreatedAt)
-                    .Where(m => m.Id > firstMsgId)
-                    .Take(pageSize)
-                    .Reverse()
-                    .LoadAsync();
-            }
-            else
-            {
-                await context.Entry(chat)
-                    .Collection(c => c.Messages)
-                    .Query()
-                    .OrderByDescending(m => m.CreatedAt)
-                    .Take(pageSize)
-                    .Reverse()
-                    .LoadAsync();
-            }
+            var messages = await messageQuery
+                .Include(m => m.Files)
+                .OrderByDescending(m => m.CountNumber)
+                .Take(pageSize)
+                .AsNoTracking()
+                .ToListAsync();
 
-            return chat;
+            messages.Reverse();
+            return messages;
         }
     }
 }

@@ -2,6 +2,9 @@ using MediatR;
 
 namespace FusePortal.Application.Common.SeedWork
 {
+    /// <summary>
+    /// Saves Changes to Database Automatically
+    /// </summary>
     public abstract class BaseCommandHandler<TCommand, TResult> : IRequestHandler<TCommand, TResult>
         where TCommand : IRequest<TResult>
     {
@@ -26,7 +29,9 @@ namespace FusePortal.Application.Common.SeedWork
                 CancellationToken ct);
     }
 
-    // Non Retruning Version
+    /// <summary>
+    /// Saves Changes to Database Automatically
+    /// </summary>
     public abstract class BaseCommandHandler<TCommand> : IRequestHandler<TCommand>
         where TCommand : IRequest
     {

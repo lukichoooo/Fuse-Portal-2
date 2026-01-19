@@ -9,4 +9,10 @@ namespace FusePortal.Application.UseCases.Content.Files
                 nameof(FileEntity.Text)
             ])]
     public partial record FileDto;
+
+
+    public record FileUpload(
+            string Name,
+            Stream Stream
+            );
 }

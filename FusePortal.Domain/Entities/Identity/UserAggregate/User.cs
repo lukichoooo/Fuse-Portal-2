@@ -39,6 +39,7 @@ public sealed class User : Entity, IAggregateRoot
     public IReadOnlyCollection<Chat> Chats => _chats.AsReadOnly();
 
 
+
     public User(
         string name,
         string email,

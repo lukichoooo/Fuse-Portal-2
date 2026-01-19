@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using FusePortal.Domain.Entities.Content.FileEntityAggregate;
 using FusePortal.Domain.SeedWork;
 
@@ -6,10 +7,14 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
 {
     public class Message : Entity
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CountNumber { get; private set; }
+
         [Required]
         public string Text { get; private set; } = "";
 
         [Required]
+        [Column(TypeName = "datetime2(3)")]
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
         [Required]
