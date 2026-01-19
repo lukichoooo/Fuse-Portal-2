@@ -16,7 +16,7 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
 
             RuleFor(x => x.FileIds)
                 .Must(x => x == null
-                        || x.Count <= config.MaxFilesPerMessage);
+                        || x.Count <= config.MaxFilesInRequest);
         }
     }
 }

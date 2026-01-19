@@ -30,7 +30,7 @@ namespace FusePortal.Api.Controllers
         public async Task<ActionResult<FileDto>> GetFileByIdAsync(
                 [FromRoute] Guid fileId
                 )
-            => Ok(new GetFileByIdQuery(fileId));
+            => Ok(_sender.Send(new GetFileByIdQuery(fileId)));
 
     }
 

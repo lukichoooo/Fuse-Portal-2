@@ -30,6 +30,7 @@ namespace FusePortal.Infrastructure.Repo
             return await query
                 .OrderBy(u => u.Id)
                 .Take(pageSize)
+                .AsNoTracking()
                 .ToListAsync();
         }
 

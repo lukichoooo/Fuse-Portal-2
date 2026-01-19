@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using FusePortal.Domain.SeedWork;
 
 namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
@@ -9,8 +10,8 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
         public string Name { get; private set; }
 
         [Required]
+        [ForeignKey(nameof(Subject))]
         public Guid SubjectId { get; private set; }
-        public Subject? Subject { get; private set; }
 
         public Lecturer(string name, Guid subjectId)
         {

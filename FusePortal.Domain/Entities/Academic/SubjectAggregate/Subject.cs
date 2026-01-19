@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using FusePortal.Domain.Entities.Academic.SubjectAggregate.SubjectDomainEvents;
 using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Domain.SeedWork;
@@ -11,8 +12,8 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
         public string Name { get; private set; }
 
         [Required]
+        [ForeignKey(nameof(User))]
         public Guid UserId { get; private set; }
-        public User? User { get; private set; }
 
         public int? Grade { get; private set; }
 

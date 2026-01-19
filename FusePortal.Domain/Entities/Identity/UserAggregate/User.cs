@@ -29,14 +29,12 @@ public sealed class User : Entity, IAggregateRoot
     private readonly List<University> _universities = [];
     public IReadOnlyCollection<University> Universities => _universities.AsReadOnly();
 
+
     private readonly List<FileEntity> _fileEntities = [];
-    public IReadOnlyCollection<FileEntity> FileEntities => _fileEntities.AsReadOnly();
 
     private readonly List<Subject> _subjects = [];
-    public IReadOnlyCollection<Subject> Subjects => _subjects.AsReadOnly();
 
     private readonly List<Chat> _chats = [];
-    public IReadOnlyCollection<Chat> Chats => _chats.AsReadOnly();
 
 
 

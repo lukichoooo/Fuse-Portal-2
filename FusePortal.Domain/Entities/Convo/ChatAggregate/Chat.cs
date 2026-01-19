@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using FusePortal.Domain.Entities.Content.FileEntityAggregate;
 using FusePortal.Domain.Entities.Convo.ChatAggregate.DomainEvents;
 using FusePortal.Domain.Entities.Identity.UserAggregate;
@@ -12,8 +13,8 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
         public string Name { get; private set; }
 
         [Required]
+        [ForeignKey(nameof(User))]
         public Guid UserId { get; private set; }
-        public User? User { get; private set; }
 
         public string? LastResponseId { get; private set; }
 

@@ -7,22 +7,22 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
 {
     public class Message : Entity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        [Required]
         public int CountNumber { get; private set; }
 
         [Required]
         public string Text { get; private set; } = "";
 
         [Required]
-        [Column(TypeName = "datetime2(3)")]
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
         [Required]
         public bool FromUser { get; private set; }
 
         [Required]
+        [ForeignKey(nameof(Chat))]
         public Guid ChatId { get; private set; }
-        public Chat? Chat { get; private set; }
 
         private readonly List<FileEntity> _files = [];
         public IReadOnlyCollection<FileEntity> Files => _files.AsReadOnly();

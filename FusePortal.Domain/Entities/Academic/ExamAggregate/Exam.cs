@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using FusePortal.Domain.Entities.Academic.ExamAggregate.ExamDomainEvents;
 using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 using FusePortal.Domain.SeedWork;
@@ -17,8 +18,8 @@ namespace FusePortal.Domain.Entities.Academic.ExamAggregate
         public int? ScoreFrom100 { get; private set; }
 
         [Required]
+        [ForeignKey(nameof(Subject))]
         public Guid SubjectId { get; private set; }
-        public Subject? Subject { get; private set; }
 
 
         public Exam(

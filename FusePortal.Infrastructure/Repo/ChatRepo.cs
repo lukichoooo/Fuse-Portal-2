@@ -29,6 +29,7 @@ namespace FusePortal.Infrastructure.Repo
             return chats
                 .OrderBy(c => c.Id)
                 .Take(pageSize)
+                .AsNoTracking()
                 .ToListAsync();
         }
 

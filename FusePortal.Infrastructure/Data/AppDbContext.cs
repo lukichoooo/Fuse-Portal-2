@@ -24,6 +24,38 @@ namespace FusePortal.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // explicit relations
+
+            modelBuilder.Entity<Chat>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<FileEntity>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<FileEntity>()
+                  .HasOne<Message>()
+                  .WithMany(m => m.Files)
+                  .HasForeignKey(f => f.MessageId)
+                  .HasPrincipalKey(m => m.Id);
+
+            modelBuilder.Entity<Subject>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(s => s.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<Exam>()
+                  .HasOne<Subject>()
+                  .WithMany()
+                  .HasForeignKey(e => e.SubjectId)
+                  .IsRequired();
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }

@@ -9,7 +9,11 @@ namespace FusePortal.Infrastructure.Data.Configurations
         public void Configure(EntityTypeBuilder<Message> builder)
         {
             builder.HasKey(m => m.CountNumber);
-            builder.HasIndex(m => m.Id);
+
+            builder.HasIndex(m => m.Id)
+                .IsUnique();
+            builder.Property(m => m.Id)
+                .IsRequired();
         }
     }
 }
