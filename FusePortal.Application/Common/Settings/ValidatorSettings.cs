@@ -25,6 +25,8 @@ namespace FusePortal.Application.Common.Settings
         public int ChatNameMaxLength { get; init; }
 
         public int MessageMaxLength { get; init; }
+
         public int MaxFilesInRequest { get; init; }
+        public int FileNameMaxLength { get; init; }
     }
 }

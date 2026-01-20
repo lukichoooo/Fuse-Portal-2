@@ -15,8 +15,14 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
                 .MaximumLength(config.MessageMaxLength);
 
             RuleFor(x => x.FileUploads)
-                .Must(x => x.Count < config.MaxFilesInRequest)
-                .Must(x => x.All(x => x.Name.Length <= config.NameMaxLength));
+                .NotNull()
+                .Must(files => files.Count <= config.MaxFilesInRequest)
+                .WithMessage($"Too many files. Max allowed is {config.MaxFilesInRequest}.");
+
+            RuleForEach(x => x.FileUploads)
+                .Must(f => f.Name.Length <= config.FileNameMaxLength)
+                .WithMessage($"File name exceeds {config.FileNameMaxLength} characters.");
+
         }
     }
 }

@@ -42,13 +42,6 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
             AddDomainEvent(new ChatMessageSentEvent(Id, message.Id));
         }
 
-        public Message GetLastMessage()
-        {
-            if (_messages.Count == 0)
-                throw new ChatDomainException($"Cannot get last message from empty chat. ChatId={Id}");
-            return _messages.Last();
-        }
-
         public void RecieveResponse(string responseText)
         {
             var response = new Message(responseText, fromUser: false, Id);
@@ -64,6 +57,13 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
 
             _messages.Remove(message);
             AddDomainEvent(new ChatMessageRemovedEvent(Id, message.Id));
+        }
+
+        public Message GetLastMessage()
+        {
+            if (_messages.Count == 0)
+                throw new ChatDomainException($"Cannot get last message from empty chat. ChatId={Id}");
+            return _messages.Last();
         }
 
 

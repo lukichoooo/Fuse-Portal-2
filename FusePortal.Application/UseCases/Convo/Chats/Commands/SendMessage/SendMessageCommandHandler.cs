@@ -39,9 +39,8 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
             var chat = await _repo.GetChatByIdAsync(command.ChatId, userId)
                 ?? throw new ChatNotFoundException($"Chat Not Found With Id={command.ChatId}");
 
-            chat.SendMessage(command.MessageText);
-
             List<FileData> files = await _fileProcessor.ProcessFilesAsync(command.FileUploads);
+            chat.SendMessage(command.MessageText, files);
 
             MessageLLMDto llmMessage = chat.GetLastMessage()
                                 .ToFacet<Message, MessageLLMDto>();
