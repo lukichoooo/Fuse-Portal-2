@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FusePortal.Domain.Entities.Content.FileEntityAggregate;
+using FusePortal.Domain.Common.Objects;
 using FusePortal.Domain.Entities.Convo.ChatAggregate.DomainEvents;
 using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Domain.SeedWork;
@@ -31,53 +31,45 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
         }
 
 
-        public void SendMessage(Message message)
+        public void SendMessage(string messageText, List<FileData>? Files = null)
         {
-            if (!message.FromUser)
-                throw new ChatDomainException("Message must be from user");
+            var message = new Message(messageText, fromUser: true, Id);
+
+            foreach (var fileE in Files ?? [])
+                message.AttachFile(fileE);
 
             _messages.Add(message);
             AddDomainEvent(new ChatMessageSentEvent(Id, message.Id));
         }
 
-        public void RecieveResponse(Message response)
+        public Message GetLastMessage()
         {
-            if (response.FromUser)
-                throw new ChatDomainException("Response cant be from user");
+            if (_messages.Count == 0)
+                throw new ChatDomainException($"Cannot get last message from empty chat. ChatId={Id}");
+            return _messages.Last();
+        }
+
+        public void RecieveResponse(string responseText)
+        {
+            var response = new Message(responseText, fromUser: false, Id);
 
             _messages.Add(response);
             AddDomainEvent(new ChatResponseRecievedEvent(Id, response.Id));
         }
 
-        public void RemoveMessage(Message message)
+        public void RemoveMessage(Guid msgId)
         {
+            var message = _messages.FirstOrDefault(m => m.Id == msgId)
+                ?? throw new ChatDomainException($"Message with id={msgId} not found");
+
             _messages.Remove(message);
             AddDomainEvent(new ChatMessageRemovedEvent(Id, message.Id));
-        }
-
-        public void AttachFileToMessage(Guid msgId, FileEntity file)
-        {
-            var message = _messages.FirstOrDefault(m => m.Id == msgId)
-                ?? throw new ChatDomainException($"Message with id={msgId} not found");
-
-            message.AttachFile(file);
-            AddDomainEvent(new ChatMessageFileAttachedEvent(Id, message.Id, file.Id));
-        }
-
-        public void DetachFileFromMessage(Guid msgId, FileEntity file)
-        {
-            var message = _messages.FirstOrDefault(m => m.Id == msgId)
-                ?? throw new ChatDomainException($"Message with id={msgId} not found");
-
-            message.DetachFile(file);
-            AddDomainEvent(new ChatMessageFileDetachedEvent(Id, message.Id, file.Id));
         }
 
 
         public void UpdateLastResponseId(string newLastResponseId)
         {
             LastResponseId = newLastResponseId;
-            // AddDomainEvent();
         }
 
 

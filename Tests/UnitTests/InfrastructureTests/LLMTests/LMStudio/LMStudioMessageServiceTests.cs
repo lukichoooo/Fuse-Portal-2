@@ -54,7 +54,7 @@ namespace InfrastructureTests.LLMTests.LMStudio
                 .Returns(_apiSettings);
             settingsChooserMock.Setup(s => s.GetParserSettings())
                 .Returns(_apiSettings);
-            settingsChooserMock.Setup(s => s.GetExamGeneratorSettings())
+            settingsChooserMock.Setup(s => s.GetExamServiceSettings())
                 .Returns(_apiSettings);
 
 

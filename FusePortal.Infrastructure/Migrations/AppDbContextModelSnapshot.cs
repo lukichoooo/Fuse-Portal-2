@@ -23,7 +23,6 @@ namespace FusePortal.Infrastructure.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Answers")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Questions")
@@ -97,9 +96,6 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Grade")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Metadata")
                         .HasColumnType("TEXT");
 
@@ -157,34 +153,6 @@ namespace FusePortal.Infrastructure.Migrations
                     b.ToTable("Universities");
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.Content.FileEntityAggregate.FileEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("MessageId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MessageId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Files");
-                });
-
             modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Chat", b =>
                 {
                     b.Property<Guid>("Id")
@@ -237,6 +205,34 @@ namespace FusePortal.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.MessageFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("MessageCountNumber")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageCountNumber");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("FusePortal.Domain.Entities.Identity.UserAggregate.User", b =>
@@ -343,20 +339,6 @@ namespace FusePortal.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FusePortal.Domain.Entities.Content.FileEntityAggregate.FileEntity", b =>
-                {
-                    b.HasOne("FusePortal.Domain.Entities.Convo.ChatAggregate.Message", null)
-                        .WithMany("Files")
-                        .HasForeignKey("MessageId")
-                        .HasPrincipalKey("Id");
-
-                    b.HasOne("FusePortal.Domain.Entities.Identity.UserAggregate.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.Chat", b =>
                 {
                     b.HasOne("FusePortal.Domain.Entities.Identity.UserAggregate.User", null)
@@ -371,6 +353,22 @@ namespace FusePortal.Infrastructure.Migrations
                     b.HasOne("FusePortal.Domain.Entities.Convo.ChatAggregate.Chat", null)
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FusePortal.Domain.Entities.Convo.ChatAggregate.MessageFile", b =>
+                {
+                    b.HasOne("FusePortal.Domain.Entities.Convo.ChatAggregate.Message", null)
+                        .WithMany("Files")
+                        .HasForeignKey("MessageCountNumber")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FusePortal.Domain.Entities.Convo.ChatAggregate.Message", null)
+                        .WithMany()
+                        .HasForeignKey("MessageId")
+                        .HasPrincipalKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

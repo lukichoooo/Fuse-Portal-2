@@ -1,9 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using FusePortal.Domain.Common.ValueObjects.Address;
-using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 using FusePortal.Domain.Entities.Academic.UniversityAggregate;
-using FusePortal.Domain.Entities.Content.FileEntityAggregate;
-using FusePortal.Domain.Entities.Convo.ChatAggregate;
 using FusePortal.Domain.Entities.Identity.UserAggregate.DomainEvents;
 using FusePortal.Domain.SeedWork;
 
@@ -30,11 +27,9 @@ public sealed class User : Entity, IAggregateRoot
     public IReadOnlyCollection<University> Universities => _universities.AsReadOnly();
 
 
-    private readonly List<FileEntity> _fileEntities = [];
+    private readonly List<Guid> _subjectIds = [];
 
-    private readonly List<Subject> _subjects = [];
-
-    private readonly List<Chat> _chats = [];
+    private readonly List<Guid> _chatIds = [];
 
 
 
@@ -100,20 +95,20 @@ public sealed class User : Entity, IAggregateRoot
         AddDomainEvent(new UserPasswordChangedEvent(Id));
     }
 
-    public void AddUniversity(University uni)
+    public void JoinUniversity(University uni)
     {
         if (_universities.Contains(uni)) return;
 
         _universities.Add(uni);
-        AddDomainEvent(new UserAddedUniversityEvent(Id, uni.Id));
+        AddDomainEvent(new UserJoinedUniversityEvent(Id, uni.Id));
     }
 
-    public void RemoveUniversity(University uni)
+    public void LeaveUniversity(University uni)
     {
         if (!_universities.Contains(uni)) return;
 
         _universities.Remove(uni);
-        AddDomainEvent(new UserRemovedUniversityEvent(Id, uni.Id));
+        AddDomainEvent(new UserLeftUniversityEvent(Id, uni.Id));
     }
 
 

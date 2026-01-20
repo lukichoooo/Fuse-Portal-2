@@ -1,4 +1,5 @@
-using FusePortal.Application.UseCases.Content.Files;
+using FusePortal.Application.Interfaces.Services.File;
+using FusePortal.Domain.Common.Objects;
 using FusePortal.Infrastructure.Services.FileProcessor.Interfaces;
 using FusePortal.Infrastructure.Settings.File;
 using Microsoft.Extensions.Logging;
@@ -44,7 +45,7 @@ namespace FusePortal.Infrastructure.Services.FileProcessor
 
         }
 
-        public async Task<List<FileDto>> ProcessFilesAsync(List<FileUpload> files)
+        public async Task<List<FileData>> ProcessFilesAsync(List<FileUpload> files)
         {
             var tasks = files.Select(async f =>
             {
@@ -61,7 +62,7 @@ namespace FusePortal.Infrastructure.Services.FileProcessor
                                         );
 
                 _logger.LogInformation("FileName: {}, Contents: {}", f.Name, text);
-                return new FileDto(f.Name, text);
+                return new FileData(f.Name, text);
             });
 
             return (await Task.WhenAll(tasks)).ToList();

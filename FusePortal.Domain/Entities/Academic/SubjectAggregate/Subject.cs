@@ -15,8 +15,6 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
         [ForeignKey(nameof(User))]
         public Guid UserId { get; private set; }
 
-        public int? Grade { get; private set; }
-
         public string? Metadata { get; private set; }
 
         private readonly List<Schedule> _schedules = [];
@@ -31,23 +29,29 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
         public Subject(
                 string name,
                 Guid userId,
-                int? grade = null,
                 string? metadata = null)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             UserId = userId;
-            Grade = grade;
             Metadata = metadata;
 
             AddDomainEvent(new SubjectCreatedEvent(Id, UserId));
         }
+
 
         public void AddSchedule(Schedule schedule)
         {
             if (_schedules.Contains(schedule)) return;
 
             _schedules.Add(schedule);
-            AddDomainEvent(new SubjectScheduleAddedEvent(Id, schedule));
+        }
+
+        public void RemoveSchedule(Schedule schedule)
+        {
+            if (!_schedules.Contains(schedule))
+                throw new SubjectDomainException($"schedule with Id={schedule.Id} not found");
+
+            _schedules.Remove(schedule);
         }
 
         public void AddLecturer(Lecturer lecturer)
@@ -55,7 +59,15 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
             if (_lecturers.Contains(lecturer)) return;
 
             _lecturers.Add(lecturer);
-            AddDomainEvent(new SubjectLecturerAddedEvent(Id, lecturer));
+        }
+
+        public void RemoveLecturer(Lecturer lecturer)
+        {
+            if (!_lecturers.Contains(lecturer))
+                throw new SubjectDomainException($"schedule with Id={lecturer.Id} not found");
+
+
+            _lecturers.Remove(lecturer);
         }
 
         public void AddSyllabus(Syllabus syllabus)
@@ -63,7 +75,14 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
             if (_syllabuses.Contains(syllabus)) return;
 
             _syllabuses.Add(syllabus);
-            AddDomainEvent(new SubjectSyllabusAddedEvent(Id, syllabus));
+        }
+
+        public void RemoveSyllabus(Syllabus syllabus)
+        {
+            if (!_syllabuses.Contains(syllabus))
+                throw new SubjectDomainException($"schedule with Id={syllabus.Id} not found");
+
+            _syllabuses.Remove(syllabus);
         }
 
 

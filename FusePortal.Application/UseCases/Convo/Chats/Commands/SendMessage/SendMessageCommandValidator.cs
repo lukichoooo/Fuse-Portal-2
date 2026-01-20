@@ -14,9 +14,9 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
                 .NotEmpty()
                 .MaximumLength(config.MessageMaxLength);
 
-            RuleFor(x => x.FileIds)
-                .Must(x => x == null
-                        || x.Count <= config.MaxFilesInRequest);
+            RuleFor(x => x.FileUploads)
+                .Must(x => x.Count < config.MaxFilesInRequest)
+                .Must(x => x.All(x => x.Name.Length <= config.NameMaxLength));
         }
     }
 }

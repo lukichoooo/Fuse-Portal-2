@@ -11,7 +11,7 @@ namespace FusePortal.Domain.Entities.Academic.ExamAggregate
         [Required]
         public string Questions { get; private set; }
 
-        public string Answers { get; private set; } = "";
+        public string? Answers { get; private set; }
 
         public string? Results { get; private set; }
 
@@ -24,13 +24,13 @@ namespace FusePortal.Domain.Entities.Academic.ExamAggregate
 
         public Exam(
                 string questions,
-                string answers,
                 Guid subjectid,
+                string? answers = null,
                 string? results = null,
                 int? scoreFrom100 = null)
         {
             Questions = questions ?? throw new ExamDomainException($"field cant be null or empty: {nameof(questions)}");
-            Answers = answers ?? throw new ExamDomainException($"field cant be null or empty: {nameof(answers)}");
+            Answers = answers;
             SubjectId = subjectid;
             Results = results;
             ScoreFrom100 = scoreFrom100;
@@ -38,6 +38,13 @@ namespace FusePortal.Domain.Entities.Academic.ExamAggregate
             AddDomainEvent(new ExamCreatedEvent(Id));
         }
 
+
+        public void FillAnswers(string answers)
+        {
+            Answers = answers ?? throw new ExamDomainException($"field {nameof(answers)} cant be null or empty");
+
+            AddDomainEvent(new ExamAnswersFilledEvent(Id, answers));
+        }
 
         public void GradeTheExam(string results, int? scoreFrom100)
         {
@@ -47,7 +54,7 @@ namespace FusePortal.Domain.Entities.Academic.ExamAggregate
             Results = results ?? throw new ExamDomainException($"field cant be null or empty: {nameof(results)}");
             ScoreFrom100 = scoreFrom100;
 
-            AddDomainEvent(new ExamGradedEvent(Id));
+            AddDomainEvent(new ExamGradedEvent(Id, scoreFrom100));
         }
 
         public void UpdateExamGrade(string results, int? scoreFrom100)
@@ -57,11 +64,12 @@ namespace FusePortal.Domain.Entities.Academic.ExamAggregate
                 GradeTheExam(results, scoreFrom100);
                 return;
             }
+            var oldGrade = ScoreFrom100;
 
             Results = results ?? throw new ExamDomainException($"field cant be null or empty: {nameof(results)}");
             ScoreFrom100 = scoreFrom100;
 
-            AddDomainEvent(new ExamGradUpdatedEvent(Id));
+            AddDomainEvent(new ExamResultUpdatedEvent(Id, oldGrade, scoreFrom100));
         }
 
 

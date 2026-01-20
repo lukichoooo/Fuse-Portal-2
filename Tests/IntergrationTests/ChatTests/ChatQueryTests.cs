@@ -147,9 +147,9 @@ namespace IntergrationTests.ChatTests
             foreach (var m in messages)
             {
                 if (m.FromUser)
-                    chat.SendMessage(m);
+                    chat.SendMessage(m.Text);
                 else
-                    chat.RecieveResponse(m);
+                    chat.RecieveResponse(m.Text);
             }
 
             var identity = new Mock<IIdentityProvider>();

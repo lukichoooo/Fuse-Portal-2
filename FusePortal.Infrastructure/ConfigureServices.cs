@@ -19,7 +19,6 @@ using FusePortal.Infrastructure.Services.LLM.Interfaces;
 using FusePortal.Infrastructure.Services.LLM.Implementation;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation;
-using FusePortal.Domain.Entities.Content.FileEntityAggregate;
 using FusePortal.Application.Interfaces.Services;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Chat;
 using FusePortal.Infrastructure.Services.SignalR;
@@ -27,9 +26,13 @@ using System.Text.Json;
 using FusePortal.Infrastructure.Data.Cache;
 using FusePortal.Infrastructure.Services.FileProcessor.Implementatoin;
 using FusePortal.Infrastructure.Services.FileProcessor.Interfaces;
-using FusePortal.Application.UseCases.Content.Files;
 using FusePortal.Infrastructure.Services.FileProcessor;
 using FusePortal.Infrastructure.Settings.File;
+using FusePortal.Application.UseCases.Academic.Exams.Services;
+using FusePortal.Infrastructure.Services.ExamGenerator;
+using FusePortal.Domain.Entities.Academic.ExamAggregate;
+using FusePortal.Domain.Entities.Academic.SubjectAggregate;
+using FusePortal.Application.Interfaces.Services.File;
 
 namespace FusePortal.Infrastructure
 {
@@ -101,7 +104,8 @@ namespace FusePortal.Infrastructure
             services.AddScoped<IUserRepo, UserRepo>();
             services.AddScoped<IUniRepo, UniRepo>();
             services.AddScoped<IChatRepo, ChatRepo>();
-            services.AddScoped<IFileRepo, FileRepo>();
+            services.AddScoped<IExamRepo, ExamRepo>();
+            services.AddScoped<ISubjectRepo, SubjectRepo>();
 
 
             // messaging
@@ -123,6 +127,10 @@ namespace FusePortal.Infrastructure
             // File
             services.AddScoped<IFileParser, FileParser>();
             services.AddScoped<IFileProcessor, FileProcessingService>();
+
+            // exam
+            services.AddScoped<IExamService, LMStudioExamService>();
+
 
             // Ocr
             services.AddSingleton<IOcrService, PaddleOcrService>(); // -- singleton

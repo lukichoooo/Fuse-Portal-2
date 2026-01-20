@@ -1,5 +1,4 @@
 using AutoFixture;
-using FusePortal.Application.UseCases.Content.Files;
 using FusePortal.Application.UseCases.Convo.Chats;
 using FusePortal.Infrastructure.Services.LLM.Implementation;
 using FusePortal.Infrastructure.Services.LLM.Interfaces;
@@ -62,7 +61,7 @@ namespace InfrastructureTests.LLMTests
         [Test]
         public void GenerateInput_WithFiles_ReturnsExpectedString()
         {
-            var files = _fix.CreateMany<FileDto>()
+            var files = _fix.CreateMany<MessageFileDto>()
                 .ToList();
             var dto = _fix.Build<MessageLLMDto>()
                 .With(m => m.Files, files)

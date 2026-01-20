@@ -57,7 +57,7 @@ namespace InfrastructureTests.LLMTests.LMStudio
                 .Returns(_apiSettings);
             settingsChooserMock.Setup(s => s.GetChatSettings())
                 .Returns(_apiSettings);
-            settingsChooserMock.Setup(s => s.GetExamGeneratorSettings())
+            settingsChooserMock.Setup(s => s.GetExamServiceSettings())
                 .Returns(_apiSettings);
 
             var keyOptions = Options.Create(_apiSettingKeys);

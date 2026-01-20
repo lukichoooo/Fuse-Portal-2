@@ -4,6 +4,7 @@ using AutoFixture;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Interfaces.EventDispatcher;
 using FusePortal.Application.Interfaces.Services;
+using FusePortal.Application.Interfaces.Services.File;
 using FusePortal.Application.UseCases.Convo.Chats;
 using FusePortal.Application.UseCases.Convo.Chats.Commands.CreateChat;
 using FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage;
@@ -12,10 +13,13 @@ using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Domain.SeedWork;
 using FusePortal.Infrastructure.Data;
 using FusePortal.Infrastructure.Repo;
+using FusePortal.Infrastructure.Services.FileProcessor;
+using FusePortal.Infrastructure.Services.FileProcessor.Interfaces;
 using FusePortal.Infrastructure.Services.LLM.Interfaces;
 using FusePortal.Infrastructure.Services.LLM.LMStudio;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Chat;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation;
+using FusePortal.Infrastructure.Settings.File;
 using FusePortal.Infrastructure.Settings.LLM;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -32,6 +36,8 @@ namespace IntergrationTests.ChatTests
         private static readonly Fixture _fix = new();
 
         private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock = new();
+
+
 
         readonly JsonSerializerOptions _serializerOptions = new()
         {
@@ -141,10 +147,9 @@ namespace IntergrationTests.ChatTests
             await sut.Handle(new CreateChatCommand(chatName), default);
 
             // Asset
-            Assert.That(user.Chats, Has.Count.EqualTo(1));
-            Assert.That(user.Chats.First().Name, Is.EqualTo(chatName));
-            Assert.That(_context.Users.First().Chats.First().Name,
-                    Is.EqualTo(chatName));
+            var res = await _context.Chats.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            Assert.That(res, Is.Not.Null);
+            Assert.That(res.Name, Is.EqualTo(chatName));
         }
 
 
@@ -159,8 +164,6 @@ namespace IntergrationTests.ChatTests
             var chat = new Chat("MyChat", user.Id);
             var chatRepo = new ChatRepo(_context);
             await chatRepo.AddAsync(chat);
-
-            var fileRepo = new FileRepo(_context);
 
             var identityMock = new Mock<IIdentityProvider>();
             identityMock.Setup(c => c.GetCurrentUserId())
@@ -179,7 +182,7 @@ namespace IntergrationTests.ChatTests
             var sut = new SendMessageCommandHandler(
                     chatRepo,
                     identityMock.Object,
-                    fileRepo,
+                    CreateFileProcessor(),
                     llmService,
                     CreateMessageStreamer(),
                     uow);
@@ -195,9 +198,9 @@ namespace IntergrationTests.ChatTests
                         ), default);
 
             // Asset
-            Assert.That(user.Chats, Has.Count.EqualTo(1));
-            var messages = user.Chats.First().Messages;
-            Assert.That(user.Chats.First().Messages, Is.EquivalentTo(messages));
+            var res = await _context.Chats.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            Assert.That(res, Is.Not.Null);
+            var messages = res.Messages;
             Assert.That(messages, Has.Count.EqualTo(2));
             Assert.That(messages.First().Text, Is.EqualTo(messageText));
         }
@@ -216,8 +219,6 @@ namespace IntergrationTests.ChatTests
             var chatRepo = new ChatRepo(_context);
             await chatRepo.AddAsync(chat);
 
-            var fileRepo = new FileRepo(_context);
-
             var identityMock = new Mock<IIdentityProvider>();
             identityMock.Setup(c => c.GetCurrentUserId())
                 .Returns(user.Id);
@@ -234,7 +235,7 @@ namespace IntergrationTests.ChatTests
             var sut = new SendMessageCommandHandler(
                     chatRepo,
                     identityMock.Object,
-                    fileRepo,
+                    CreateFileProcessor(),
                     llmService,
                     CreateMessageStreamer(),
                     uow);
@@ -250,9 +251,9 @@ namespace IntergrationTests.ChatTests
                         ), default);
 
             // Asset
-            Assert.That(user.Chats, Has.Count.EqualTo(1));
-            var messages = user.Chats.First().Messages;
-            Assert.That(user.Chats.First().Messages, Is.EquivalentTo(messages));
+            var res = await _context.Chats.FirstOrDefaultAsync(c => c.UserId == user.Id);
+            Assert.That(res, Is.Not.Null);
+            var messages = res.Messages;
             Assert.That(messages, Has.Count.EqualTo(2));
             Assert.That(messages.First().Text, Is.EqualTo(messageText));
         }
@@ -260,6 +261,36 @@ namespace IntergrationTests.ChatTests
 
 
         // Helper
+
+        private IFileProcessor CreateFileProcessor()
+        {
+            FileProcessingSettings _fileProcessingSettings = new()
+            {
+                MaxFileSizeBytes = int.MaxValue,
+                Handlers = new()
+            {
+                { ".txt", "text"},
+                { ".md", "text"},
+                { ".docx", "docx"},
+                { ".jpeg", "ocr"},
+                { ".png", "ocr"},
+                { ".pdf", "ocr"}
+            }
+            };
+
+            Mock<IOcrService> _ocrMock = new();
+            Mock<IOptions<FileProcessingSettings>> _optionsMock = new();
+            Mock<ILogger<FileProcessingService>> _loggerMock = new();
+            Mock<IFileParser> _fileParserMock = new();
+            _optionsMock.Setup(x => x.Value).Returns(_fileProcessingSettings);
+
+            return new FileProcessingService(
+                _ocrMock.Object,
+                _loggerMock.Object,
+                _optionsMock.Object,
+                _fileParserMock.Object
+            );
+        }
 
         private IMessageStreamer CreateMessageStreamer()
         {
@@ -305,8 +336,6 @@ namespace IntergrationTests.ChatTests
 
         private LMStudioMapper CreateLMStudioMapper()
         {
-
-
             var generatorMock = new Mock<ILLMInputGenerator>();
             generatorMock.Setup(g => g.GenerateInput(It.IsAny<MessageLLMDto>(), It.IsAny<string>()))
                 .Returns("INPUT");
@@ -352,7 +381,7 @@ namespace IntergrationTests.ChatTests
                 .Returns(_apiSettings);
             settingsChooserMock.Setup(s => s.GetChatSettings())
                 .Returns(_apiSettings);
-            settingsChooserMock.Setup(s => s.GetExamGeneratorSettings())
+            settingsChooserMock.Setup(s => s.GetExamServiceSettings())
                 .Returns(_apiSettings);
 
             return settingsChooserMock.Object;

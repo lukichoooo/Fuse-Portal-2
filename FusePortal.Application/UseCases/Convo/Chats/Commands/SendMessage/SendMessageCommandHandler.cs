@@ -3,8 +3,9 @@ using FusePortal.Application.Common;
 using FusePortal.Application.Common.SeedWork;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Interfaces.Services;
+using FusePortal.Application.Interfaces.Services.File;
 using FusePortal.Application.UseCases.Convo.Chats.Exceptions;
-using FusePortal.Domain.Entities.Content.FileEntityAggregate;
+using FusePortal.Domain.Common.Objects;
 using FusePortal.Domain.Entities.Convo.ChatAggregate;
 
 namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
@@ -13,46 +14,37 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
     {
         private readonly IChatRepo _repo;
         private readonly IIdentityProvider _identity;
-        private readonly IFileRepo _fileRepo;
+        private readonly IFileProcessor _fileProcessor;
         private readonly ILLMMessageService _llm;
         private readonly IMessageStreamer _streamer;
 
         public SendMessageCommandHandler(
                 IChatRepo repo,
                 IIdentityProvider identity,
-                IFileRepo fileRepo,
+                IFileProcessor fileProcessor,
                 ILLMMessageService llm,
                 IMessageStreamer streamer,
                 IUnitOfWork uow) : base(uow)
         {
             _repo = repo;
             _identity = identity;
-            _fileRepo = fileRepo;
+            _fileProcessor = fileProcessor;
             _llm = llm;
             _streamer = streamer;
         }
 
-        // return id? or no?
         protected override async Task ExecuteAsync(SendMessageCommand command, CancellationToken ct)
         {
             var userId = _identity.GetCurrentUserId();
             var chat = await _repo.GetChatByIdAsync(command.ChatId, userId)
                 ?? throw new ChatNotFoundException($"Chat Not Found With Id={command.ChatId}");
 
-            var message = new Message(command.MessageText, fromUser: true, chat.Id);
-            chat.SendMessage(message);
+            chat.SendMessage(command.MessageText);
 
-            if (command.FileIds != null)
-            {
-                foreach (var fileId in command.FileIds)
-                {
-                    var fileE = await _fileRepo.GetById(fileId, userId)
-                        ?? throw new FileNotFoundException($"File Not Found With Id={fileId}");
-                    chat.AttachFileToMessage(message.Id, fileE);
-                }
-            }
+            List<FileData> files = await _fileProcessor.ProcessFilesAsync(command.FileUploads);
 
-            MessageLLMDto llmMessage = message.ToFacet<Message, MessageLLMDto>();
+            MessageLLMDto llmMessage = chat.GetLastMessage()
+                                .ToFacet<Message, MessageLLMDto>();
 
             MessageLLMDto responseDto;
             if (command.Streaming)
@@ -67,8 +59,7 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
                 responseDto = await _llm.SendMessageAsync(llmMessage, ct);
             }
 
-            var response = new Message(responseDto.Text, fromUser: false, chat.Id);
-            chat.RecieveResponse(response);
+            chat.RecieveResponse(responseDto.Text);
         }
     }
 }

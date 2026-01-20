@@ -16,9 +16,10 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
 
         public async Task<LMStudioResponse?> ReadResponseAsStreamAsync(
                 HttpResponseMessage responseMessage,
-                Func<string, Task>? onReceived)
+                Func<string, Task>? onReceived,
+                CancellationToken ct = default)
         {
-            await using var stream = await responseMessage.Content.ReadAsStreamAsync();
+            await using var stream = await responseMessage.Content.ReadAsStreamAsync(ct);
             using var reader = new StreamReader(stream, Encoding.UTF8);
 
             string? line;
@@ -26,7 +27,7 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
             string? currentData = null;
             LMStudioStreamEvent? streamEvent = null;
 
-            while ((line = await reader.ReadLineAsync()) != null)
+            while ((line = await reader.ReadLineAsync(ct)) != null)
             {
                 _logger.LogInformation("Stream from LMStudio --- \n {}", line);
 

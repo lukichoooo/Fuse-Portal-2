@@ -35,7 +35,7 @@ namespace FusePortal.Application.UseCases.Identity.Users.Commands.RemoveUniFromU
             var uni = await _uniRepo.GetByIdAsync(request.UniId)
                 ?? throw new UniNotFoundException($"University With Id={request.UniId}, Not Found");
 
-            user.RemoveUniversity(uni);
+            user.LeaveUniversity(uni);
         }
     }
 }

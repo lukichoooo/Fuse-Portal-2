@@ -10,7 +10,6 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Queries.GetMessagesPage
             IChatRepo repo,
             IIdentityProvider identity)
         : IRequestHandler<GetMessagesPageQuery, List<MessageDto>>
-    // TODO: add BaseQueryHandler in SeedWork
     {
         private readonly IChatRepo _repo = repo;
         private readonly IIdentityProvider _identity = identity;

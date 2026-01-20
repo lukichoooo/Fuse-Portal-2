@@ -152,7 +152,7 @@ namespace InfrastructureTests.LLMTests.LMStudio
             var sut = CreateSut();
 
             Assert.ThrowsAsync<LMStudioApiException>(async () =>
-                await sut.SendMessageAsync(request, _apiSettings));
+                await sut.SendMessageAsync(request, _apiSettings, default));
         }
 
 
@@ -185,9 +185,10 @@ namespace InfrastructureTests.LLMTests.LMStudio
             var streamerMock = new Mock<ILLMApiResponseStreamReader>();
             streamerMock.Setup(s => s.ReadResponseAsStreamAsync(
                         It.IsAny<HttpResponseMessage>(),
-                        onRecieved
+                        onRecieved,
+                        It.IsAny<CancellationToken>()
                         ))
-                .ReturnsAsync((HttpResponseMessage _, Func<string, Task> onRecieved) =>
+                .ReturnsAsync((HttpResponseMessage _, Func<string, Task> onRecieved, CancellationToken _) =>
                         {
                             onRecieved.Invoke("message");
                             return expectedResponse;
@@ -246,9 +247,10 @@ namespace InfrastructureTests.LLMTests.LMStudio
             var streamerMock = new Mock<ILLMApiResponseStreamReader>();
             streamerMock.Setup(s => s.ReadResponseAsStreamAsync(
                         It.IsAny<HttpResponseMessage>(),
-                        onRecieved
+                        onRecieved,
+                        It.IsAny<CancellationToken>()
                         ))
-                .ReturnsAsync((HttpResponseMessage _, Func<string, Task> onRecieved) =>
+                .ReturnsAsync((HttpResponseMessage _, Func<string, Task> onRecieved, CancellationToken _) =>
                         {
                             onRecieved.Invoke("message");
                             return null;
@@ -271,6 +273,7 @@ namespace InfrastructureTests.LLMTests.LMStudio
                     ),
                     ItExpr.IsAny<CancellationToken>()
                 );
+            Assert.That(onRecievedCalled, Is.True);
         }
 
 

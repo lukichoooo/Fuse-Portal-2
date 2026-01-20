@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using FusePortal.Domain.Entities.Content.FileEntityAggregate;
+using FusePortal.Domain.Common.Objects;
 using FusePortal.Domain.SeedWork;
 
 namespace FusePortal.Domain.Entities.Convo.ChatAggregate
@@ -24,8 +24,8 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
         [ForeignKey(nameof(Chat))]
         public Guid ChatId { get; private set; }
 
-        private readonly List<FileEntity> _files = [];
-        public IReadOnlyCollection<FileEntity> Files => _files.AsReadOnly();
+        private readonly List<MessageFile> _files = [];
+        public IReadOnlyCollection<MessageFile> Files => _files.AsReadOnly();
 
 
         public Message(string text, bool fromUser, Guid chatId)
@@ -35,15 +35,12 @@ namespace FusePortal.Domain.Entities.Convo.ChatAggregate
             ChatId = chatId;
         }
 
-        internal void AttachFile(FileEntity file)
+        internal void AttachFile(FileData fileData)
         {
-            if (_files.Contains(file))
-                return;
-
-            _files.Add(file);
+            _files.Add(new MessageFile(fileData.Name, fileData.Text, Id));
         }
 
-        internal void DetachFile(FileEntity file)
+        internal void DetachFile(MessageFile file)
         {
             if (!_files.Contains(file))
                 return;

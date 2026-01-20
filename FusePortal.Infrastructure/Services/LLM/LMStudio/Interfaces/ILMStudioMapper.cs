@@ -1,3 +1,4 @@
+using FusePortal.Application.UseCases.Academic.Exams;
 using FusePortal.Application.UseCases.Convo.Chats;
 
 namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces
@@ -8,16 +9,19 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces
                 LMStudioResponse response,
                 Guid chatId);
 
+        string ToOutputText(LMStudioResponse response);
+
         LMStudioRequest ToRequest(
                 MessageLLMDto msg,
                 string? previousResponseId = null,
                 string? rulesPrompt = null);
 
-        LMStudioRequest ToRequest(string text,
+        LMStudioRequest ToRequest(
+                string text,
                 string? rulesPrompt = null);
 
-        string ToOutputText(LMStudioResponse response);
-
-        // LMStudioRequest ToRequest(ExamDto examDto, string? rulesPrompt = null);
+        LMStudioRequest ToRequest(
+                ExamDto examDto,
+                string? rulesPrompt = null);
     }
 }

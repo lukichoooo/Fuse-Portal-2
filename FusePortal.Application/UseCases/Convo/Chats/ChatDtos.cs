@@ -1,9 +1,17 @@
 using Facet;
-using FusePortal.Application.UseCases.Content.Files;
 using FusePortal.Domain.Entities.Convo.ChatAggregate;
 
 namespace FusePortal.Application.UseCases.Convo.Chats
 {
+    [Facet(typeof(MessageFile),
+            Include =
+            [
+                nameof(MessageFile.Name),
+                nameof(MessageFile.Text)
+            ])]
+    public partial record MessageFileDto;
+
+
     [Facet(typeof(Message),
             Include =
             [
@@ -17,7 +25,7 @@ namespace FusePortal.Application.UseCases.Convo.Chats
             ],
             NestedFacets =
             [
-                typeof(FileDto),
+                typeof(MessageFileDto),
             ])
     ]
     public partial record MessageDto;
@@ -27,13 +35,11 @@ namespace FusePortal.Application.UseCases.Convo.Chats
             [
                 nameof(Message.Text),
                 nameof(Message.ChatId),
-                nameof(Message.CreatedAt),
-                nameof(Message.FromUser),
                 nameof(Message.Files),
             ],
             NestedFacets =
             [
-                typeof(FileDto),
+                typeof(MessageFileDto),
             ])
     ]
     public partial record MessageLLMDto;

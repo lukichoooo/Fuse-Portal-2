@@ -53,7 +53,7 @@ namespace IntergrationTests.UserTests
             // Arrange
             var user = _fix.Create<User>();
             foreach (var userUni in user.Universities)
-                user.RemoveUniversity(userUni);
+                user.LeaveUniversity(userUni);
             var userRepo = new UserRepo(_context);
             await userRepo.AddAsync(user);
 
@@ -98,7 +98,7 @@ namespace IntergrationTests.UserTests
             // Arrange
             var user = _fix.Create<User>();
             foreach (var userUni in user.Universities)
-                user.RemoveUniversity(userUni);
+                user.LeaveUniversity(userUni);
             var userRepo = new UserRepo(_context);
             await userRepo.AddAsync(user);
 
@@ -123,7 +123,7 @@ namespace IntergrationTests.UserTests
                     uniRepo,
                     identityMock.Object,
                     uow);
-            user.AddUniversity(uni);
+            user.JoinUniversity(uni);
 
             await _context.SaveChangesAsync();
 
@@ -145,7 +145,7 @@ namespace IntergrationTests.UserTests
             // Arrange
             var user = _fix.Create<User>();
             foreach (var userUni in user.Universities)
-                user.RemoveUniversity(userUni);
+                user.LeaveUniversity(userUni);
             var userRepo = new UserRepo(_context);
             await userRepo.AddAsync(user);
 
@@ -169,7 +169,7 @@ namespace IntergrationTests.UserTests
                     uniRepo,
                     identityMock.Object,
                     uow);
-            user.AddUniversity(uni);
+            user.JoinUniversity(uni);
 
             await _context.SaveChangesAsync();
 
@@ -186,7 +186,7 @@ namespace IntergrationTests.UserTests
             // Arrange
             var user = _fix.Create<User>();
             foreach (var userUni in user.Universities)
-                user.RemoveUniversity(userUni);
+                user.LeaveUniversity(userUni);
             var userRepo = new UserRepo(_context);
             await userRepo.AddAsync(user);
 

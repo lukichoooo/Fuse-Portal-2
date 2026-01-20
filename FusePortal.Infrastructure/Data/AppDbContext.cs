@@ -2,7 +2,6 @@ using System.Reflection;
 using FusePortal.Domain.Entities.Academic.ExamAggregate;
 using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 using FusePortal.Domain.Entities.Academic.UniversityAggregate;
-using FusePortal.Domain.Entities.Content.FileEntityAggregate;
 using FusePortal.Domain.Entities.Convo.ChatAggregate;
 using FusePortal.Domain.Entities.Identity.UserAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +19,7 @@ namespace FusePortal.Infrastructure.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
 
-        public DbSet<FileEntity> Files { get; set; }
+        public DbSet<MessageFile> Files { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,15 +31,9 @@ namespace FusePortal.Infrastructure.Data
                 .HasForeignKey(c => c.UserId)
                 .IsRequired();
 
-            modelBuilder.Entity<FileEntity>()
-                .HasOne<User>()
-                .WithMany()
-                .HasForeignKey(f => f.UserId)
-                .IsRequired();
-
-            modelBuilder.Entity<FileEntity>()
+            modelBuilder.Entity<MessageFile>()
                   .HasOne<Message>()
-                  .WithMany(m => m.Files)
+                  .WithMany()
                   .HasForeignKey(f => f.MessageId)
                   .HasPrincipalKey(m => m.Id);
 

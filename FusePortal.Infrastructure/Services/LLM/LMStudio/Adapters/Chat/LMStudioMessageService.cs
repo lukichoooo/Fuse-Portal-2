@@ -5,17 +5,25 @@ using FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces;
 
 namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Chat
 {
-    public class LMStudioMessageService(
-            ILMStudioApi api,
-            ILMStudioMapper mapper,
-            IChatMetadataService metadataService,
-            ILLMApiSettingsChooser apiSettings) : ILLMMessageService
+    public class LMStudioMessageService : ILLMMessageService
     {
 
-        private readonly ILMStudioApi _api = api;
-        private readonly ILMStudioMapper _mapper = mapper;
-        private readonly IChatMetadataService _metadataService = metadataService;
-        private readonly ILLMApiSettingsChooser _apiSettings = apiSettings;
+        private readonly ILMStudioApi _api;
+        private readonly ILMStudioMapper _mapper;
+        private readonly IChatMetadataService _metadataService;
+        private readonly ILLMApiSettingsChooser _apiSettings;
+
+        public LMStudioMessageService(
+                ILMStudioApi api,
+                ILMStudioMapper mapper,
+                IChatMetadataService metadataService,
+                ILLMApiSettingsChooser apiSettings)
+        {
+            _api = api;
+            _mapper = mapper;
+            _metadataService = metadataService;
+            _apiSettings = apiSettings;
+        }
 
         public async Task<MessageLLMDto> SendMessageAsync(
                 MessageLLMDto message,
@@ -31,7 +39,8 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Chat
             request.Stream = false;
             LMStudioResponse response = await _api.SendMessageAsync(
                      request,
-                     _apiSettings.GetChatSettings());
+                     _apiSettings.GetChatSettings(),
+                     ct);
 
             await _metadataService.SetLastResponseIdAsync(chatId, response.Id);
             return _mapper.ToMessageDto(response, chatId);
@@ -53,7 +62,8 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Chat
             LMStudioResponse response = await _api.SendMessageWithStreamingAsync(
                      request,
                      _apiSettings.GetChatSettings(),
-                     onStreamReceived);
+                     onStreamReceived,
+                     ct);
 
             await _metadataService.SetLastResponseIdAsync(chatId, response.Id);
             return _mapper.ToMessageDto(response, chatId);

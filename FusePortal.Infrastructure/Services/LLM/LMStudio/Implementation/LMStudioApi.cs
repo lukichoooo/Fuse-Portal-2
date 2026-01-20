@@ -6,6 +6,7 @@ using FusePortal.Infrastructure.Services.LLM.LMStudio.Exceptions;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces;
 using FusePortal.Infrastructure.Settings.LLM;
 using Microsoft.Extensions.Logging;
+using SQLitePCL;
 
 namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
 {
@@ -32,7 +33,8 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
 
         public async Task<LMStudioResponse> SendMessageAsync(
                 LMStudioRequest request,
-               LLMApiSettings settings)
+               LLMApiSettings settings,
+               CancellationToken ct = default)
         {
             _httpClient.BaseAddress = new Uri(settings.URL);
             _httpClient.Timeout = TimeSpan.FromMinutes(settings.TimeoutMins);
@@ -42,11 +44,11 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
 
             _logger.LogInformation("content sending to LMStudio --- \n {}", json);
 
-            var response = await _httpClient.PostAsync(settings.ChatRoute, content);
+            var response = await _httpClient.PostAsync(settings.ChatRoute, content, ct);
             await CheckUnsuccessfulResponseAsync(response);
 
             // Deserialize directly from stream
-            var result = await response.Content.ReadFromJsonAsync<LMStudioResponse>(_serializerOptions)
+            var result = await response.Content.ReadFromJsonAsync<LMStudioResponse>(_serializerOptions, ct)
                    ?? throw new LMStudioApiException("LMStudio returned empty response");
 
             _logger.LogInformation("Text from LMStudio --- \n {}", result.Output[0].Content[0].Text);
@@ -58,7 +60,8 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
         public async Task<LMStudioResponse> SendMessageWithStreamingAsync(
                 LMStudioRequest lmStudioRequest,
                 LLMApiSettings settings,
-                Func<string, Task>? onReceived)
+                Func<string, Task>? onReceived,
+                CancellationToken ct = default)
         {
             _httpClient.BaseAddress = new Uri(settings.URL);
             _httpClient.Timeout = TimeSpan.FromMinutes(settings.TimeoutMins);
@@ -82,7 +85,7 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
             await CheckUnsuccessfulResponseAsync(response);
 
             LMStudioResponse? completedResponse =
-                await _responseStreamer.ReadResponseAsStreamAsync(response, onReceived);
+                await _responseStreamer.ReadResponseAsStreamAsync(response, onReceived, ct);
 
             _logger.LogInformation("Completed Response from LMStudio --- \n {}",
                     completedResponse?.ToString());

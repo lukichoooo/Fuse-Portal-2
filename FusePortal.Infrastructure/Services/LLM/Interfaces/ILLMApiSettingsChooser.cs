@@ -6,10 +6,11 @@ namespace FusePortal.Infrastructure.Services.LLM.Interfaces
     {
         LLMApiSettings GetChatSettings();
         LLMApiSettings GetParserSettings();
-        LLMApiSettings GetExamGeneratorSettings();
+        LLMApiSettings GetExamServiceSettings();
 
         string GetChatPrompt();
         string GetParserPrompt();
         string GetExamGeneratorPrompt();
+        string GetExamResultGraderPrompt();
     }
 }

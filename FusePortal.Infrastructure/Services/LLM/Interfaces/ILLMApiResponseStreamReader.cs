@@ -6,6 +6,7 @@ namespace FusePortal.Infrastructure.Services.LLM.Interfaces
     {
         Task<LMStudioResponse?> ReadResponseAsStreamAsync(
                 HttpResponseMessage responseMessage,
-                Func<string, Task>? onReceived);
+                Func<string, Task>? onReceived,
+                CancellationToken ct = default);
     }
 }

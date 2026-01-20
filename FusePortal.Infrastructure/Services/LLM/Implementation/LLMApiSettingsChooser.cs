@@ -41,11 +41,12 @@ namespace FusePortal.Infrastructure.Services.LLM.Implementation
         public string GetExamGeneratorPrompt()
             => _promptProvider.GetExamGeneratorPrompt();
 
-        public string GetExamResultAnalyzerPrompt()
+        public string GetExamResultGraderPrompt()
             => _promptProvider.GetExamResultAnalyzerPrompt();
 
-        public LLMApiSettings GetExamGeneratorSettings()
+        public LLMApiSettings GetExamServiceSettings()
             => _examSettings;
+
 
 
 

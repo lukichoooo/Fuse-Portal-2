@@ -1,3 +1,4 @@
+using FusePortal.Api.Controllers.Extensions;
 using FusePortal.Api.Settings;
 using FusePortal.Application.UseCases.Convo.Chats;
 using FusePortal.Application.UseCases.Convo.Chats.Commands.CreateChat;
@@ -49,22 +50,56 @@ namespace FusePortal.Api.Controllers
             return Ok();
         }
 
-        [HttpPost("send")]
+
+        // DTO
+        public class SendMessageRequest
+        {
+            [FromForm(Name = "messageText")]
+            public string MessageText { get; set; } = null!;
+
+            [FromForm(Name = "files")]
+            public IFormFileCollection? Files { get; set; }
+        }
+
+        [HttpPost("send/{chatId:guid}")]
         public async Task<IActionResult> SendMessage(
-                [FromBody] SendMessageCommand sendMessageCommand)
+            [FromRoute] Guid chatId,
+            [FromForm] SendMessageRequest request)
         {
-            await _sender.Send(sendMessageCommand with { Streaming = false });
+            var uploads = request.Files != null
+                ? await request.Files.ToFileUpload()
+                : [];
+
+            await _sender.Send(new SendMessageCommand(
+                chatId,
+                request.MessageText,
+                uploads,
+                Streaming: false));
+
             return Ok();
         }
 
 
-        [HttpPost("ws/send")]
+
+        [HttpPost("ws/send/{ChatId:guid}")]
         public async Task<IActionResult> SendMessageStreaming(
-                [FromBody] SendMessageCommand sendMessageCommand)
+            [FromRoute] Guid chatId,
+            [FromForm] SendMessageRequest request)
         {
-            await _sender.Send(sendMessageCommand with { Streaming = true });
+            var uploads = request.Files != null
+                ? await request.Files.ToFileUpload()
+                : [];
+
+            await _sender.Send(new SendMessageCommand(
+                chatId,
+                request.MessageText,
+                uploads,
+                Streaming: true));
+
             return Ok();
+
         }
+
 
     }
 }

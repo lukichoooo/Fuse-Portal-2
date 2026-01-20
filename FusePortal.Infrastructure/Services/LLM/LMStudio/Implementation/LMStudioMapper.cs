@@ -1,3 +1,4 @@
+using FusePortal.Application.UseCases.Academic.Exams;
 using FusePortal.Application.UseCases.Convo.Chats;
 using FusePortal.Infrastructure.Services.LLM.Interfaces;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces;
@@ -18,16 +19,11 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
         }
 
         public MessageLLMDto ToMessageDto(LMStudioResponse response, Guid chatId)
-            => new()
-            {
-                Text = response.Output[0].Content[0].Text,
-                CreatedAt = DateTimeOffset
-                        .FromUnixTimeSeconds(response.CreatedAt)
-                        .UtcDateTime,
-                FromUser = false,
-                ChatId = chatId,
-                Files = []
-            };
+           => new(
+                Text: response.Output[0].Content[0].Text,
+                ChatId: chatId,
+                Files: []
+            );
 
         public LMStudioRequest ToRequest(
                 MessageLLMDto msg,
@@ -52,11 +48,11 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
         public string ToOutputText(LMStudioResponse response)
             => response.Output[0].Content[0].Text;
 
-        // public LMStudioRequest ToRequest(ExamDto examDto, string? rulesPrompt = null)
-        //     => new()
-        //     {
-        //         Model = _settingsChooser.GetExamGeneratorSettings().Model,
-        //         Input = _inputGenerator.GenerateInput(examDto, rulesPrompt),
-        //     };
+        public LMStudioRequest ToRequest(ExamDto examDto, string? rulesPrompt = null)
+            => new()
+            {
+                Model = _settingsChooser.GetExamServiceSettings().Model,
+                Input = _inputGenerator.GenerateInput(examDto, rulesPrompt),
+            };
     }
 }
