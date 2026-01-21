@@ -16,7 +16,7 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
         [ForeignKey(nameof(Subject))]
         public Guid SubjectId { get; private set; }
 
-        internal Syllabus(
+        public Syllabus(
                 string name,
                 string content,
                 Guid subjectId)

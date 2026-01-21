@@ -12,9 +12,6 @@ namespace FusePortal.Infrastructure.Repo
         private readonly AppDbContext _context = context;
         private readonly IDomainEventDispatcher _domainDispatcher = domainDispatcher;
 
-        // TODO: probs should be somewhere else
-        // private readonly IIntergrationEventDispatcher _integrationDispatcher = intergrationDispatcher;
-
         public async Task CommitAsync(CancellationToken ct = default)
         {
             await _context.SaveChangesAsync(ct);

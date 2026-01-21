@@ -37,6 +37,7 @@ namespace FusePortal.Infrastructure.Repo
             => await _context.Chats
                 .FirstOrDefaultAsync(c => c.Id == chatId && c.UserId == userId);
 
+
         public async Task<List<Message>> GetMessagesPageAsync(
                 Guid chatId,
                 int? topConutNumber,
@@ -45,6 +46,10 @@ namespace FusePortal.Infrastructure.Repo
         {
             IQueryable<Message> messageQuery = _context.Messages
                 .Where(m => m.ChatId == chatId);
+
+            var chat = await GetChatByIdAsync(chatId, userId);
+            if (chat is null)
+                return [];
 
             if (topConutNumber is not null)
                 messageQuery = messageQuery.Where(m => m.CountNumber < topConutNumber);
