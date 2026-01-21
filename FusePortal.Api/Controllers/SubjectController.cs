@@ -30,13 +30,7 @@ namespace FusePortal.Api.Controllers
         private readonly ControllerSettings _settings = options.Value;
         private readonly ISender _sender = sender;
 
-        // [HttpPost("upload-page")]
-        // public async Task<ActionResult> ParseHtmlPortalAsync()
-        // {
-        //     var rawPage = await Request.GetRawBodyAsync();
-        //     await _service.ParseAndSavePortalAsync(rawPage);
-        //     return Ok();
-        // }
+
 
         [HttpGet("subjects")]
         public async Task<ActionResult<List<SubjectDto>>> GetSubjectsPageAsync(
@@ -144,40 +138,6 @@ namespace FusePortal.Api.Controllers
             return Ok();
         }
 
-
-        // [HttpGet("syllabus/{syllabusId}")]
-        // public async Task<IActionResult> GetSylabusByIdAsync(
-        //         [FromRoute] int syllabusId)
-        //     => Ok(await _sender.Send(new GetSyllabusByIdQuery(syllabusId)));
-
-    }
-
-
-    public static class HttpRequestExtensions
-    {
-        // Helper
-        public static async Task<string> GetRawBodyAsync(
-            this HttpRequest request,
-            Encoding? encoding = null)
-        {
-            if (!request.Body.CanSeek)
-            {
-                // We only do this if the stream isn't *already* seekable,
-                // as EnableBuffering will create a new stream instance
-                // each time it's called
-                request.EnableBuffering();
-            }
-
-            request.Body.Position = 0;
-
-            var reader = new StreamReader(request.Body, encoding ?? Encoding.UTF8);
-
-            var body = await reader.ReadToEndAsync().ConfigureAwait(false);
-
-            request.Body.Position = 0;
-
-            return body;
-        }
     }
 
 }

@@ -7,7 +7,7 @@ OUTPUT:
 - No text outside JSON.
 - JSON-escape all strings.
 - Never use null.
-- Missing values → """" or [].
+- Missing values → "" or [].
 
 DATES:
 - ISO-8601 only: YYYY-MM-DDTHH:mm:ssZ
@@ -18,30 +18,37 @@ DATES:
 - Ensure that all fields match the schema exactly. 'grade' should always be a number. If the grade is missing, use 0.
 
 SCHEMA (EXACT, ALL KEYS REQUIRED):
-{{
-  ""subjects"": [
-    {{
-      ""name"": ""string"",
-      ""grade"": 0,
-      ""metadata"": ""string"",
-      ""schedules"": [
-        {{
-          ""date"": {
-              ""start"": ""YYYY-MM-DDTHH:mm:ssZ"",
-              ""end"": ""YYYY-MM-DDTHH:mm:ssZ"",
+{
+  "subjects": [
+    {
+      "name": string,
+      "metadata": string,
+      "schedules": [
+        {
+          "lecture_date": {
+            "start": YYYY-MM-DDTHH:mm:ssZ,
+            "end": YYYY-MM-DDTHH:mm:ssZ
           },
-          ""location"": ""string"",
-          ""metadata"": ""string""
-        }}
+          "location": string,
+          "metadata": string
+        }
       ],
-      ""lecturers"": [{{ ""name"": ""string"" }}],
-      ""syllabuses"": [
-        {{ ""name"": ""string"", ""content"": ""string"", ""metadata"": ""string"" }}
+      "lecturers": [
+        {
+          "name": string
+        }
+      ],
+      "syllabuses": [
+        {
+          "name": string,
+          "content": string
+        }
       ]
-    }}
-  ],
-  ""metadata"": ""string""
-}}
+    }
+  ]
+}
+
+
 
 RULE:
 - Never omit required keys.

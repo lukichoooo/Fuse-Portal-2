@@ -33,6 +33,8 @@ using FusePortal.Infrastructure.Services.ExamGenerator;
 using FusePortal.Domain.Entities.Academic.ExamAggregate;
 using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 using FusePortal.Application.Interfaces.Services.File;
+using FusePortal.Application.Interfaces.Services.PortalTransfer;
+using FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Portal;
 
 namespace FusePortal.Infrastructure
 {
@@ -122,6 +124,7 @@ namespace FusePortal.Infrastructure
             services.AddScoped<ILLMApiResponseStreamReader, LMStudioApiResponseStreamer>();
             services.AddScoped<ILMStudioApi, LMStudioApi>();
             services.AddScoped<ILMStudioMapper, LMStudioMapper>();
+            services.AddScoped<IPortalTransferService, LMStudioPortalTransferService>();
 
             // File
             services.AddScoped<IFileParser, FileParser>();
