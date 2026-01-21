@@ -32,7 +32,7 @@ namespace FusePortal.Application.UseCases.Academic.Exams.Commands.GenerateExam
         protected override async Task<Guid> ExecuteAsync(GenerateExamCommand command, CancellationToken ct)
         {
             var userId = _identity.GetCurrentUserId();
-            var subject = await _subjectRepo.FindById(command.SubjectId, userId)
+            var subject = await _subjectRepo.GetByIdWithSyllabusesAsync(command.SubjectId, userId)
                 ?? throw new SubjectNotFoundException(@$"subject with SyllabusId={command.SubjectId}
                         not found For UserId={userId}");
 

@@ -26,8 +26,10 @@ SCHEMA (EXACT, ALL KEYS REQUIRED):
       ""metadata"": ""string"",
       ""schedules"": [
         {{
-          ""start"": ""YYYY-MM-DDTHH:mm:ssZ"",
-          ""end"": ""YYYY-MM-DDTHH:mm:ssZ"",
+          ""date"": {
+              ""start"": ""YYYY-MM-DDTHH:mm:ssZ"",
+              ""end"": ""YYYY-MM-DDTHH:mm:ssZ"",
+          },
           ""location"": ""string"",
           ""metadata"": ""string""
         }}

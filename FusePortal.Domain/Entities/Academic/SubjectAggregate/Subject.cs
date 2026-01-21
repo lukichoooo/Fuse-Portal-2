@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FusePortal.Domain.Common.ValueObjects.LectureDate;
 using FusePortal.Domain.Entities.Academic.SubjectAggregate.SubjectDomainEvents;
 using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Domain.SeedWork;
@@ -39,48 +40,49 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
         }
 
 
-        public void AddSchedule(Schedule schedule)
+        public void AddSchedule(LectureDate lectureDate, string? location, string? metadata)
         {
-            if (_schedules.Contains(schedule)) return;
+            var schedule = new Schedule(Id, lectureDate, location, metadata);
 
+            if (_schedules.Contains(schedule)) return;
             _schedules.Add(schedule);
         }
 
-        public void RemoveSchedule(Schedule schedule)
+        public void RemoveSchedule(Guid scheduleId)
         {
-            if (!_schedules.Contains(schedule))
-                throw new SubjectDomainException($"schedule with Id={schedule.Id} not found");
-
+            var schedule = _schedules.FirstOrDefault(s => s.Id == scheduleId)
+                ?? throw new SubjectDomainException($"schedule with Id={scheduleId} not found");
             _schedules.Remove(schedule);
         }
 
-        public void AddLecturer(Lecturer lecturer)
+        public void AddLecturer(string name)
         {
+            var lecturer = new Lecturer(name, Id);
             if (_lecturers.Contains(lecturer)) return;
 
             _lecturers.Add(lecturer);
         }
 
-        public void RemoveLecturer(Lecturer lecturer)
+        public void RemoveLecturer(Guid lecturerId)
         {
-            if (!_lecturers.Contains(lecturer))
-                throw new SubjectDomainException($"schedule with Id={lecturer.Id} not found");
-
+            var lecturer = _lecturers.FirstOrDefault(l => l.Id == lecturerId)
+                ?? throw new SubjectDomainException($"schedule with Id={lecturerId} not found");
 
             _lecturers.Remove(lecturer);
         }
 
-        public void AddSyllabus(Syllabus syllabus)
+        public void AddSyllabus(string name, string content)
         {
+            var syllabus = new Syllabus(name, content, Id);
             if (_syllabuses.Contains(syllabus)) return;
 
             _syllabuses.Add(syllabus);
         }
 
-        public void RemoveSyllabus(Syllabus syllabus)
+        public void RemoveSyllabus(Guid syllabusId)
         {
-            if (!_syllabuses.Contains(syllabus))
-                throw new SubjectDomainException($"schedule with Id={syllabus.Id} not found");
+            var syllabus = _syllabuses.FirstOrDefault(s => s.Id == syllabusId)
+                ?? throw new SubjectDomainException($"schedule with Id={syllabusId} not found");
 
             _syllabuses.Remove(syllabus);
         }

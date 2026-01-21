@@ -108,9 +108,8 @@ namespace FusePortal.Infrastructure
             services.AddScoped<ISubjectRepo, SubjectRepo>();
 
 
-            // messaging
+            // events
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
-            services.AddScoped<IIntegrationEventDispatcher, IntegrationEventDispatcher>();
 
 
             // LLM

@@ -31,7 +31,7 @@ namespace FusePortal.Application.UseCases.Academic.Exams.Queries.GetExamById
             var exam = await _repo.FindById(request.ExamId)
                 ?? throw new ExamNotFoundException($"exam with Id={request.ExamId}");
 
-            var subject = await _subjectRepo.FindById(exam.SubjectId, userId);
+            var subject = await _subjectRepo.GetByIdAsync(exam.SubjectId, userId);
             if (subject is null)
             {
                 throw new SubjectNotFoundException(@$"subject with SyllabusId={exam.SubjectId}

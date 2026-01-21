@@ -11,5 +11,4 @@ namespace FusePortal.Infrastructure.Data.Configurations
             builder.OwnsOne(u => u.Address);
         }
     }
-
 }

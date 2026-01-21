@@ -4,29 +4,28 @@ using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.UseCases.Academic.Subjects.Exceptions;
 using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 
-namespace FusePortal.Application.UseCases.Academic.Subjects.Commands.Child.AddLecturerToSubjectCommand
+namespace FusePortal.Application.UseCases.Academic.Subjects.Commands.Child.CreateSyllabusForSubject
 {
-    public class AddLecturerToSubjectCommandHandler : BaseCommandHandler<AddLecturerToSubjectCommand>
+    public class CreateSyllabusForSubjectCommandHandler : BaseCommandHandler<CreateSyllabusForSubjectCommand>
     {
         private readonly ISubjectRepo _repo;
         private readonly IIdentityProvider _identity;
 
-        public AddLecturerToSubjectCommandHandler(
-                ISubjectRepo repo,
+        public CreateSyllabusForSubjectCommandHandler(
                 IIdentityProvider identity,
+                ISubjectRepo repo,
                 IUnitOfWork uow) : base(uow)
         {
             _repo = repo;
             _identity = identity;
         }
 
-        protected override Task ExecuteAsync(AddLecturerToSubjectCommand command, CancellationToken ct)
+        protected override async Task ExecuteAsync(CreateSyllabusForSubjectCommand command, CancellationToken ct)
         {
             var userId = _identity.GetCurrentUserId();
-            var subject = _repo.FindById(command.SubjectId, userId)
+            var subject = await _repo.GetByIdAsync(command.SubjectId, userId)
                 ?? throw new SubjectNotFoundException($"Subject with Id={command.SubjectId} not found");
-            // subject.AddLecturer(); TODO:
-            return Task.CompletedTask;
+            subject.AddSyllabus(command.Name, command.Content);
         }
     }
 }

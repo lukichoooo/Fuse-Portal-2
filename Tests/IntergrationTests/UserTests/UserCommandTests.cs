@@ -8,7 +8,6 @@ using FusePortal.Domain.Entities.Identity.UserAggregate;
 using FusePortal.Domain.SeedWork;
 using FusePortal.Infrastructure.Data;
 using FusePortal.Infrastructure.Repo;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 

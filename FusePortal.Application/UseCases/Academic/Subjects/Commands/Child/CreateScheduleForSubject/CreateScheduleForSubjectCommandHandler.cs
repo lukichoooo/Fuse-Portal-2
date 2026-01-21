@@ -4,14 +4,14 @@ using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.UseCases.Academic.Subjects.Exceptions;
 using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 
-namespace FusePortal.Application.UseCases.Academic.Subjects.Commands.RemoveSubject
+namespace FusePortal.Application.UseCases.Academic.Subjects.Commands.Child.CreateScheduleForSubject
 {
-    public class RemoveSubjectCommandHandler : BaseCommandHandler<RemoveSubjectCommand>
+    public class CreateScheduleForSubjectCommandHandler : BaseCommandHandler<CreateScheduleForSubjectCommand>
     {
         private readonly ISubjectRepo _repo;
         private readonly IIdentityProvider _identity;
 
-        public RemoveSubjectCommandHandler(
+        public CreateScheduleForSubjectCommandHandler(
                 ISubjectRepo repo,
                 IIdentityProvider identity,
                 IUnitOfWork uow) : base(uow)
@@ -20,13 +20,12 @@ namespace FusePortal.Application.UseCases.Academic.Subjects.Commands.RemoveSubje
             _identity = identity;
         }
 
-        protected override async Task ExecuteAsync(RemoveSubjectCommand command, CancellationToken ct)
+        protected override async Task ExecuteAsync(CreateScheduleForSubjectCommand command, CancellationToken ct)
         {
             var userId = _identity.GetCurrentUserId();
             var subject = await _repo.GetByIdAsync(command.SubjectId, userId)
                 ?? throw new SubjectNotFoundException($"Subject with Id={command.SubjectId} not found");
-
-            _repo.Remove(subject);
+            subject.AddSchedule(command.LectureDate, command.Location, command.Metadata);
         }
     }
 }

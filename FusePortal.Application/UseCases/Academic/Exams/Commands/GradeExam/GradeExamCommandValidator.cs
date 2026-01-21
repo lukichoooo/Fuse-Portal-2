@@ -16,7 +16,7 @@ namespace FusePortal.Application.UseCases.Academic.Exams.Commands.GradeExam
 
             RuleFor(x => x.Answers)
                 .NotEmpty()
-                .MaximumLength(config.ExamAnswerMaxLength);
+                .MaximumLength(config.FileCharactersMax);
         }
     }
 }

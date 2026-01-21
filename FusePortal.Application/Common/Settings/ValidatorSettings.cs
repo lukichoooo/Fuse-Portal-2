@@ -18,14 +18,13 @@ namespace FusePortal.Application.Common.Settings
         public int UniNameMaxLength { get; init; }
         public int UniNameMinLength { get; init; }
 
-        // exam
-        public int ExamAnswerMaxLength { get; init; }
 
         // chat
         public int ChatNameMaxLength { get; init; }
-
         public int MessageMaxLength { get; init; }
 
+        // file
+        public int FileCharactersMax { get; init; }
         public int MaxFilesInRequest { get; init; }
         public int FileNameMaxLength { get; init; }
     }

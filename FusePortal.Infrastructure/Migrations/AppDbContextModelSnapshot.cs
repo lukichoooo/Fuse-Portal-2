@@ -69,16 +69,10 @@ namespace FusePortal.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("End")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Location")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Metadata")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Start")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("SubjectId")
@@ -299,6 +293,28 @@ namespace FusePortal.Infrastructure.Migrations
                         .WithMany("Schedules")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("FusePortal.Domain.Common.ValueObjects.LectureDate.LectureDate", "LectureDate", b1 =>
+                        {
+                            b1.Property<Guid>("ScheduleId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime>("End")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime>("Start")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("ScheduleId");
+
+                            b1.ToTable("Schedule");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ScheduleId");
+                        });
+
+                    b.Navigation("LectureDate")
                         .IsRequired();
                 });
 

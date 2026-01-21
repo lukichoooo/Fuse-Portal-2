@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FusePortal.Domain.Common.ValueObjects.LectureDate;
 using FusePortal.Domain.SeedWork;
 
 namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
@@ -7,10 +8,7 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
     public class Schedule : Entity
     {
         [Required]
-        public DateTime Start { get; private set; }
-
-        [Required]
-        public DateTime End { get; private set; }
+        public LectureDate LectureDate { get; private set; }
 
         [Required]
         [ForeignKey(nameof(Subject))]
@@ -21,13 +19,11 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
 
         public Schedule(
                 Guid subjectId,
-                DateTime start,
-                DateTime end,
+                LectureDate lectureDate,
                 string? location = null,
                 string? metadata = null)
         {
-            Start = start;
-            End = end;
+            LectureDate = lectureDate;
             SubjectId = subjectId;
             Location = location;
             Metadata = metadata;

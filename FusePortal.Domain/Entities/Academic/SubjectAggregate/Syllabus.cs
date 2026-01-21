@@ -16,18 +16,14 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
         [ForeignKey(nameof(Subject))]
         public Guid SubjectId { get; private set; }
 
-        public string? Metadata { get; private set; }
-
         internal Syllabus(
                 string name,
                 string content,
-                Guid subjectId,
-                string? metadata = null)
+                Guid subjectId)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Content = content ?? throw new ArgumentNullException(nameof(content));
             SubjectId = subjectId;
-            Metadata = metadata;
         }
 
 

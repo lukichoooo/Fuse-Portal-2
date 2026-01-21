@@ -1,5 +1,6 @@
 using FluentValidation;
 using FusePortal.Application.Common.Settings;
+using FusePortal.Application.Common.Validators;
 using Microsoft.Extensions.Options;
 
 namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
@@ -15,14 +16,7 @@ namespace FusePortal.Application.UseCases.Convo.Chats.Commands.SendMessage
                 .MaximumLength(config.MessageMaxLength);
 
             RuleFor(x => x.FileUploads)
-                .NotNull()
-                .Must(files => files.Count <= config.MaxFilesInRequest)
-                .WithMessage($"Too many files. Max allowed is {config.MaxFilesInRequest}.");
-
-            RuleForEach(x => x.FileUploads)
-                .Must(f => f.Name.Length <= config.FileNameMaxLength)
-                .WithMessage($"File name exceeds {config.FileNameMaxLength} characters.");
-
+                .SetValidator(new FileUploadListValidator(options));
         }
     }
 }

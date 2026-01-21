@@ -172,8 +172,8 @@ namespace FusePortal.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Start = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    End = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LectureDate_Start = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    LectureDate_End = table.Column<DateTime>(type: "TEXT", nullable: false),
                     SubjectId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Location = table.Column<string>(type: "TEXT", nullable: true),
                     Metadata = table.Column<string>(type: "TEXT", nullable: true)
