@@ -32,16 +32,17 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Portal
         {
             page = CleanHtml(page);
 
-            LMStudioRequest lmStudioRequest = _mapper.ToRequest(
-                   text: page,
-                    rulesPrompt: _apiSettings.GetParserPrompt());
+            LMStudioCompletionRequest lmStudioRequest = _mapper.ToCompletionRequest(
+                    text: page,
+                    rulesPrompt: _apiSettings.GetParserPrompt(),
+                    jsonSchema: _apiSettings.GetParserSchema());
 
-            LMStudioResponse response = await _api.SendMessageAsync(
+            LMStudioCompletionResponse response = await _api.SendMessageCompletitionAsync(
                     lmStudioRequest,
                     _apiSettings.GetParserSettings()
                     );
 
-            var portalText = _mapper.ToOutputText(response);
+            var portalText = response.Choices[0].Text;
 
             var portalJson = ExtractJsonObject(portalText);
 

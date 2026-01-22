@@ -116,9 +116,6 @@ namespace FusePortal.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Metadata")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -343,6 +340,14 @@ namespace FusePortal.Infrastructure.Migrations
                             b1.Property<Guid>("UniversityId")
                                 .HasColumnType("TEXT");
 
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
                             b1.HasKey("UniversityId");
 
                             b1.ToTable("Universities");
@@ -394,6 +399,14 @@ namespace FusePortal.Infrastructure.Migrations
                     b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.HasKey("UserId");

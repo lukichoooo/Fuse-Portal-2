@@ -9,6 +9,11 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces
                 LLMApiSettings settings,
                 CancellationToken ct = default);
 
+        Task<LMStudioCompletionResponse> SendMessageCompletitionAsync(
+                LMStudioCompletionRequest request,
+                LLMApiSettings settings,
+                CancellationToken ct = default);
+
         Task<LMStudioResponse> SendMessageWithStreamingAsync(
                 LMStudioRequest request,
                 LLMApiSettings settings,

@@ -1,7 +1,9 @@
 using System.Text.Json;
 using AutoFixture;
+using AutoFixture.Kernel;
 using FusePortal.Application.Interfaces.Services.PortalTransfer;
 using FusePortal.Application.UseCases.Convo.Chats;
+using FusePortal.Domain.Common.ValueObjects.LectureDate;
 using FusePortal.Infrastructure.Services.LLM.Interfaces;
 using FusePortal.Infrastructure.Services.LLM.LMStudio;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Portal;
@@ -21,6 +23,8 @@ namespace InfrastructureTests.LLMTests.LMStudio
         public void BeforeAll()
         {
             _fix.Behaviors.Add(new OmitOnRecursionBehavior());
+
+            _fix.Customizations.Add(new LectureDateBuilder());
         }
 
         private record PortalLLMDto(List<SubjectLLMDto> Subjects);
@@ -211,4 +215,22 @@ namespace InfrastructureTests.LLMTests.LMStudio
         }
 
     }
+
+
+
+    public class LectureDateBuilder : ISpecimenBuilder
+    {
+        public object Create(object request, ISpecimenContext context)
+        {
+            if (request is not Type t || t != typeof(LectureDate))
+                return new NoSpecimen();
+
+            // Always ensure Start <= End
+            var start = DateTime.UtcNow;
+            var end = start.AddHours(1);
+
+            return new LectureDate(start, end);
+        }
+    }
+
 }

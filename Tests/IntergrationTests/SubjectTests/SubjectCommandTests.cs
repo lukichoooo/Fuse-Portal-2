@@ -1,4 +1,5 @@
 using AutoFixture;
+using AutoFixture.Kernel;
 using FusePortal.Application.Interfaces.Auth;
 using FusePortal.Application.Interfaces.EventDispatcher;
 using FusePortal.Application.UseCases.Academic.Subjects.Commands.Child.CreateLecturerForSubject;
@@ -37,6 +38,7 @@ namespace IntergrationTests.SubjectTests
             _context = new AppDbContext(options);
 
             _fix.Behaviors.Add(new OmitOnRecursionBehavior());
+            _fix.Customizations.Add(new LectureDateBuilder());
 
             foreach (var userUni in USER.Universities)
                 USER.LeaveUniversity(userUni);
@@ -321,6 +323,20 @@ namespace IntergrationTests.SubjectTests
                 Assert.That(res.Syllabuses, Is.Empty);
             }
 
+        }
+    }
+
+    public class LectureDateBuilder : ISpecimenBuilder
+    {
+        public object Create(object request, ISpecimenContext context)
+        {
+            if (request is not Type t || t != typeof(LectureDate))
+                return new NoSpecimen();
+
+            var start = DateTime.UtcNow;
+            var end = start.AddHours(1);
+
+            return new LectureDate(start, end);
         }
     }
 }

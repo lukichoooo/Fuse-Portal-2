@@ -23,5 +23,12 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces
         LMStudioRequest ToRequest(
                 ExamDto examDto,
                 string? rulesPrompt = null);
+
+
+        LMStudioCompletionRequest ToCompletionRequest(
+            string text,
+            string? rulesPrompt = null,
+            string? jsonSchema = null);
+
     }
 }

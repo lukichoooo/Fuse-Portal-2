@@ -15,7 +15,7 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
 
         public Lecturer(string name, Guid subjectId)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Name = name ?? throw new SubjectDomainException($"{nameof(name)} cannot be null");
             SubjectId = subjectId;
         }
 

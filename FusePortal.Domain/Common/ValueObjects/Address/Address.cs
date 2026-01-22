@@ -4,8 +4,8 @@ namespace FusePortal.Domain.Common.ValueObjects.Address
 {
     public sealed class Address : ValueObject
     {
-        public string Country { get; }
-        public string City { get; }
+        public string Country { get; private set; }
+        public string City { get; private set; }
 
         public Address(string country, string city)
         {

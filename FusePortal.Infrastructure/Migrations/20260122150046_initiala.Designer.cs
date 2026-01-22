@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FusePortal.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260121132614_initial")]
-    partial class initial
+    [Migration("20260122150046_initiala")]
+    partial class initiala
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,9 +117,6 @@ namespace FusePortal.Infrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Metadata")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -346,6 +343,14 @@ namespace FusePortal.Infrastructure.Migrations
                             b1.Property<Guid>("UniversityId")
                                 .HasColumnType("TEXT");
 
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
                             b1.HasKey("UniversityId");
 
                             b1.ToTable("Universities");
@@ -397,6 +402,14 @@ namespace FusePortal.Infrastructure.Migrations
                     b.OwnsOne("FusePortal.Domain.Common.ValueObjects.Address.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("UserId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.HasKey("UserId");

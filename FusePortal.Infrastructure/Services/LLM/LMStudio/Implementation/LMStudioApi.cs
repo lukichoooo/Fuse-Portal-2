@@ -6,7 +6,6 @@ using FusePortal.Infrastructure.Services.LLM.LMStudio.Exceptions;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Interfaces;
 using FusePortal.Infrastructure.Settings.LLM;
 using Microsoft.Extensions.Logging;
-using SQLitePCL;
 
 namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
 {
@@ -52,6 +51,32 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
                    ?? throw new LMStudioApiException("LMStudio returned empty response");
 
             _logger.LogInformation("Text from LMStudio --- \n {}", result.Output[0].Content[0].Text);
+
+            return result;
+        }
+
+
+        public async Task<LMStudioCompletionResponse> SendMessageCompletitionAsync(
+                LMStudioCompletionRequest request,
+                LLMApiSettings settings,
+                CancellationToken ct = default)
+        {
+            _httpClient.BaseAddress = new Uri(settings.URL);
+            _httpClient.Timeout = TimeSpan.FromMinutes(settings.TimeoutMins);
+
+            var json = JsonSerializer.Serialize(request, _serializerOptions);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            _logger.LogInformation("content sending to LMStudio --- \n {}", json);
+
+            var response = await _httpClient.PostAsync(settings.ChatRoute, content, ct);
+            await CheckUnsuccessfulResponseAsync(response);
+
+            // Deserialize directly from stream
+            var result = await response.Content.ReadFromJsonAsync<LMStudioCompletionResponse>(_serializerOptions, ct)
+                   ?? throw new LMStudioApiException("LMStudio returned empty response");
+
+            _logger.LogInformation("Text from LMStudio --- \n {}", result.Choices[0].Text);
 
             return result;
         }

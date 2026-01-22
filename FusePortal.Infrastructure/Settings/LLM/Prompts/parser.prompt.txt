@@ -17,37 +17,6 @@ DATES:
 - Ensure that all fields match the schema exactly. 'grade' should always be a number. If the grade is missing, use 0.
 
 SCHEMA (EXACT, ALL KEYS REQUIRED):
-{
-  "subjects": [
-    {
-      "name": string,
-      "metadata": string,
-      "schedules": [
-        {
-          "lecture_date": {
-            "start": YYYY-MM-DDTHH:mm:ssZ,
-            "end": YYYY-MM-DDTHH:mm:ssZ
-          },
-          "location": string,
-          "metadata": string
-        }
-      ],
-      "lecturers": [
-        {
-          "name": string
-        }
-      ],
-      "syllabuses": [
-        {
-          "name": string,
-          "content": string
-        }
-      ]
-    }
-  ]
-}
-
-
 
 RULE:
 - Never omit required keys.

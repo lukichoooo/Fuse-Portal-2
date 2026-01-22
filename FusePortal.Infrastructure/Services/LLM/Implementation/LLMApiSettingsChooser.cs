@@ -12,12 +12,12 @@ namespace FusePortal.Infrastructure.Services.LLM.Implementation
         private readonly LLMApiSettings _parserSettings;
         private readonly LLMApiSettings _examSettings;
 
-        private readonly IPromptProvider _promptProvider;
+        private readonly IFileReader _fileProvider;
 
         public LLMApiSettingsChooser(
             IOptions<LLMApiSettingKeys> keyOptions,
             IOptionsMonitor<LLMApiSettings> apiOptionsMonitor,
-            IPromptProvider promptProvider)
+            IFileReader promptProvider)
         {
             _apiKeys = keyOptions.Value;
 
@@ -25,12 +25,12 @@ namespace FusePortal.Infrastructure.Services.LLM.Implementation
             _parserSettings = apiOptionsMonitor.Get(_apiKeys.Parser);
             _examSettings = apiOptionsMonitor.Get(_apiKeys.Exam);
 
-            _promptProvider = promptProvider;
+            _fileProvider = promptProvider;
         }
 
         // chat
         public string GetChatPrompt()
-            => _promptProvider.GetChatPrompt();
+            => _fileProvider.GetChatPrompt();
 
         public LLMApiSettings GetChatSettings()
             => _chatSettings;
@@ -39,10 +39,10 @@ namespace FusePortal.Infrastructure.Services.LLM.Implementation
 
         // exam
         public string GetExamGeneratorPrompt()
-            => _promptProvider.GetExamGeneratorPrompt();
+            => _fileProvider.GetExamGeneratorPrompt();
 
         public string GetExamResultGraderPrompt()
-            => _promptProvider.GetExamResultAnalyzerPrompt();
+            => _fileProvider.GetExamResultAnalyzerPrompt();
 
         public LLMApiSettings GetExamServiceSettings()
             => _examSettings;
@@ -52,7 +52,10 @@ namespace FusePortal.Infrastructure.Services.LLM.Implementation
 
         // parser
         public string GetParserPrompt()
-            => _promptProvider.GetParserPrompt();
+            => _fileProvider.GetParserPrompt();
+
+        public string GetParserSchema()
+            => _fileProvider.GetParserSchema();
 
         public LLMApiSettings GetParserSettings()
             => _parserSettings;

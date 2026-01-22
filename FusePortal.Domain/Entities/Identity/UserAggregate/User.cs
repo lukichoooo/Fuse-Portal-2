@@ -43,7 +43,7 @@ public sealed class User : Entity, IAggregateRoot
         Email = email ?? throw new UserDomainException($"field can't be null or empty: {nameof(email)}");
         PasswordHash = passwordHash ?? throw new UserDomainException($"field can't be null or empty: {nameof(passwordHash)}");
         Address = address ?? throw new UserDomainException($"field can't be null or empty: {nameof(address)}");
-        Role = RoleType.Student;
+        Role = RoleType.User;
 
         AddDomainEvent(new UserRegisteredEvent(Id));
     }

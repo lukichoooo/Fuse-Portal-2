@@ -3,10 +3,11 @@ using FusePortal.Infrastructure.Services.LLM.Interfaces;
 namespace FusePortal.Infrastructure.Services.LLM.Implementation
 {
 
-    public sealed class FilePromptProvider : IPromptProvider
+    public sealed class FilePromptProvider : IFileReader
     {
         private readonly string _chatPrompt;
         private readonly string _parserPrompt;
+        private readonly string _parserSchema;
         private readonly string _examGeneratorPrompt;
         private readonly string _examResultAnalyzerPrompt;
 
@@ -23,12 +24,14 @@ namespace FusePortal.Infrastructure.Services.LLM.Implementation
             _parserPrompt = File.ReadAllText(Path.Combine(basePath, "parser.prompt.txt")) + DateTime.Now.ToString();
             _examGeneratorPrompt = File.ReadAllText(Path.Combine(basePath, "exam_generator.prompt.txt"));
             _examResultAnalyzerPrompt = File.ReadAllText(Path.Combine(basePath, "exam_result_analyzer.prompt.txt"));
+            _parserSchema = File.ReadAllText(Path.Combine(basePath, "parser.output_schema.txt"));
         }
 
         public string GetChatPrompt() => _chatPrompt;
         public string GetParserPrompt() => _parserPrompt;
         public string GetExamGeneratorPrompt() => _examGeneratorPrompt;
         public string GetExamResultAnalyzerPrompt() => _examResultAnalyzerPrompt;
+        public string GetParserSchema() => _parserSchema;
     }
 
 }

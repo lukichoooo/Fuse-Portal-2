@@ -2,8 +2,8 @@ namespace FusePortal.Infrastructure.Settings.LLM
 {
     public class LLMApiSettingKeys
     {
-        public string Chat { get; set; } = null!;
-        public string Parser { get; set; } = null!;
-        public string Exam { get; set; } = null!;
+        public string Chat { get; set; }
+        public string Parser { get; set; }
+        public string Exam { get; set; }
     }
 }

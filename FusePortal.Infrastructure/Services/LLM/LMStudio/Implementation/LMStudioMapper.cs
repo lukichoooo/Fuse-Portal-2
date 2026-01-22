@@ -36,6 +36,7 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
                 PreviousResponseId = previousResponseId
             };
 
+
         public LMStudioRequest ToRequest(
                 string text,
                 string? rulesPrompt = null)
@@ -44,6 +45,35 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Implementation
                 Model = _settingsChooser.GetParserSettings().Model,
                 Input = _inputGenerator.GenerateInput(text, rulesPrompt),
             };
+
+
+        public LMStudioCompletionRequest ToCompletionRequest(
+            string text,
+            string? rulesPrompt = null,
+            string? jsonSchema = null)
+        {
+            var request = new LMStudioCompletionRequest
+            {
+                Model = _settingsChooser.GetParserSettings().Model,
+                Prompt = _inputGenerator.GenerateInput(text, rulesPrompt)
+            };
+
+            if (!string.IsNullOrWhiteSpace(jsonSchema))
+            {
+                request.ResponseFormat = new ResponseFormat
+                {
+                    Type = "json_schema",
+                    JsonSchema = new JsonSchema
+                    {
+                        Schema = System.Text.Json.JsonSerializer.Deserialize<object>(jsonSchema) ?? new { }
+                    }
+                };
+            }
+
+            return request;
+        }
+
+
 
         public string ToOutputText(LMStudioResponse response)
             => response.Output[0].Content[0].Text;

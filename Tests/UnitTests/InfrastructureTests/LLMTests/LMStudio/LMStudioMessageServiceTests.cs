@@ -76,7 +76,7 @@ namespace InfrastructureTests.LLMTests.LMStudio
             apiOptionsMonitorMock.Setup(m => m.Get(It.IsAny<string>()))
                 .Returns(_apiSettings);
 
-            var promptProviderMock = new Mock<IPromptProvider>();
+            var promptProviderMock = new Mock<IFileReader>();
 
             var chooser = new LLMApiSettingsChooser(
                 keyOptionsMock.Object,

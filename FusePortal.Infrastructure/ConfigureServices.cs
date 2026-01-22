@@ -35,6 +35,7 @@ using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 using FusePortal.Application.Interfaces.Services.File;
 using FusePortal.Application.Interfaces.Services.PortalTransfer;
 using FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Portal;
+using IronOcr;
 
 namespace FusePortal.Infrastructure
 {
@@ -79,7 +80,7 @@ namespace FusePortal.Infrastructure
             services.Configure<LLMApiSettingKeys>(configuration.GetSection("LLMApiSettingKeys"));
 
             services.Configure<LLMApiSettings>("Parser",
-                configuration.GetSection("LLMApiSettings:Chat"));
+                configuration.GetSection("LLMApiSettings:Parser"));
             services.Configure<LLMApiSettings>("Chat",
                 configuration.GetSection("LLMApiSettings:Chat"));
             services.Configure<LLMApiSettings>("Exam",
@@ -118,7 +119,7 @@ namespace FusePortal.Infrastructure
             services.AddScoped<IChatMetadataService, ChatMetadataService>();
             services.AddScoped<ILLMInputGenerator, LLMInputGenerator>();
             services.AddSingleton<ILLMApiSettingsChooser, LLMApiSettingsChooser>(); // -- singleton
-            services.AddSingleton<IPromptProvider, FilePromptProvider>(); // -- singleton
+            services.AddSingleton<IFileReader, FilePromptProvider>(); // -- singleton
             // lmStudioLLM
             services.AddScoped<ILLMMessageService, LMStudioMessageService>();
             services.AddScoped<ILLMApiResponseStreamReader, LMStudioApiResponseStreamer>();
@@ -135,7 +136,11 @@ namespace FusePortal.Infrastructure
 
 
             // Ocr
-            services.AddSingleton<IOcrService, PaddleOcrService>(); // -- singleton
+            services.AddSingleton(new IronTesseract
+            {
+                Language = OcrLanguage.EnglishBest
+            });
+            services.AddSingleton<IOcrService, IronTesseractOcrService>();
 
             // Http Clients
             services.AddHttpClient<LMStudioApi>();

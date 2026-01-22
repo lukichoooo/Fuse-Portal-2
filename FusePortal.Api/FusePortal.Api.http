@@ -1,6 +1,0 @@
-@FusePortal.Api_HostAddress = http://localhost:5192
-
-GET {{FusePortal.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

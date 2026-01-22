@@ -32,7 +32,7 @@ namespace FusePortal.Domain.Entities.Academic.SubjectAggregate
                 Guid userId,
                 string? metadata = null)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Name = name ?? throw new SubjectDomainException($"{nameof(name)} cannot be null");
             UserId = userId;
             Metadata = metadata;
 
