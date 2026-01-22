@@ -74,9 +74,11 @@ namespace FusePortal.Infrastructure.Services.LLM.LMStudio.Adapters.Portal
                     if (depth == 0 && start != -1)
                         return text.Substring(start, i - start + 1);
                 }
+                if (depth < 0)
+                    break;
             }
 
-            throw new InvalidOperationException("No valid JSON object found.");
+            throw new LMStudioJsonParseException("No valid JSON object found.");
         }
 
 

@@ -20,7 +20,7 @@ namespace FusePortal.Infrastructure.Services.LLM.Implementation
                     "Prompts");
 
             _chatPrompt = File.ReadAllText(Path.Combine(basePath, "chat.prompt.txt"));
-            _parserPrompt = File.ReadAllText(Path.Combine(basePath, "parser.prompt.txt"));
+            _parserPrompt = File.ReadAllText(Path.Combine(basePath, "parser.prompt.txt")) + DateTime.Now.ToString();
             _examGeneratorPrompt = File.ReadAllText(Path.Combine(basePath, "exam_generator.prompt.txt"));
             _examResultAnalyzerPrompt = File.ReadAllText(Path.Combine(basePath, "exam_result_analyzer.prompt.txt"));
         }

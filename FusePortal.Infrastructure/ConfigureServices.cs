@@ -116,8 +116,8 @@ namespace FusePortal.Infrastructure
 
             // LLM
             services.AddScoped<IChatMetadataService, ChatMetadataService>();
-            services.AddScoped<ILLMApiSettingsChooser, LLMApiSettingsChooser>();
             services.AddScoped<ILLMInputGenerator, LLMInputGenerator>();
+            services.AddSingleton<ILLMApiSettingsChooser, LLMApiSettingsChooser>(); // -- singleton
             services.AddSingleton<IPromptProvider, FilePromptProvider>(); // -- singleton
             // lmStudioLLM
             services.AddScoped<ILLMMessageService, LMStudioMessageService>();

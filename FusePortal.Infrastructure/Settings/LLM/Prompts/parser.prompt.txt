@@ -14,7 +14,6 @@ DATES:
 - Month 01–12 only.
 - Valid day for month.
 - If a date is unclear or invalid → REMOVE that schedule.
-- Include schedules for each subject for the next 3 months from today {DateTime.UtcNow}. // TODO: make this configurable
 - Ensure that all fields match the schema exactly. 'grade' should always be a number. If the grade is missing, use 0.
 
 SCHEMA (EXACT, ALL KEYS REQUIRED):
@@ -55,3 +54,6 @@ RULE:
 - Empty data → empty array [].
 
 OUTPUT JSON ONLY.
+
+- Include schedules for each subject for the next 3 months from today
+Todays Date is: -- 

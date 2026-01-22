@@ -4,36 +4,42 @@ using FusePortal.Domain.Entities.Academic.SubjectAggregate;
 namespace FusePortal.Application.Interfaces.Services.PortalTransfer
 {
     [Facet(typeof(Lecturer),
-            exclude:
+            Include =
             [
-                nameof(Lecturer.Id),
-                nameof(Lecturer.SubjectId),
+                nameof(Lecturer.Name),
             ])]
     public partial record LecturerLLMDto;
 
 
     [Facet(typeof(Syllabus),
-            exclude:
+            Include =
             [
-                nameof(Syllabus.Id),
-                nameof(Syllabus.SubjectId),
+                nameof(Syllabus.Name),
+                nameof(Syllabus.Content),
             ])]
     public partial record SyllabusLLMDto;
 
 
     [Facet(typeof(Schedule),
-            exclude:
+            Include =
             [
-                nameof(Schedule.Id),
-                nameof(Schedule.SubjectId),
+                nameof(Schedule.LectureDate),
+                nameof(Schedule.Location),
+                nameof(Schedule.Metadata),
             ])]
     public partial record ScheduleLLMDto;
 
 
     [Facet(typeof(Subject),
-            exclude:
+            Include =
             [
-                nameof(Subject.Id),
+                nameof(Subject.Name),
+                nameof(Subject.UserId),
+                nameof(Subject.Metadata),
+
+                nameof(Subject.Lecturers),
+                nameof(Subject.Schedules),
+                nameof(Subject.Syllabuses),
             ],
             NestedFacets =
             [
